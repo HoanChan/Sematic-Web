@@ -1,0 +1,74 @@
+[
+    {
+        "title": "Học sinh",
+        "image": "hocSinh_logo.png",
+        "style": "height: 150px; margin-top: 1rem;",
+        "content": "Quản lý, sửa đổi thông tin của học sinh",
+        "links": [
+            {
+                "url": "/hocSinh/edit",
+                "text": "Sửa hồ sơ",
+                "class": "btn btn-primary"
+            },
+            {
+                "url": "/hocSinh/search",
+                "text": "Tìm kiếm hồ sơ",
+                "class": "btn btn-success"
+            }
+        ]
+    },
+    {
+        "title": "Giáo viên",
+        "image": "giaoVien_logo.png",
+        "style": "height: 150px; margin-top: 1rem;",
+        "content": "Quản lý, sửa đổi thông tin của giáo viên",
+        "links": [
+            {
+                "url": "/giaoVien/edit",
+                "text": "Sửa hồ sơ",
+                "class": "btn btn-primary"
+            },
+            {
+                "url": "/giaoVien/search",
+                "text": "Tìm kiếm hồ sơ",
+                "class": "btn btn-success"
+            }
+        ]
+    },
+    {
+        "title": "Lớp học",
+        "image": "lopHoc_logo.png",
+        "style": "height: 150px; margin-top: 1rem;",
+        "content": "Quản lý, sửa đổi thông tin của lớp học",
+        "links": [
+            {
+                "url": "/lopHoc/edit",
+                "text": "Sửa hồ sơ",
+                "class": "btn btn-primary"
+            },
+            {
+                "url": "/lopHoc/search",
+                "text": "Tìm kiếm hồ sơ",
+                "class": "btn btn-success"
+            }
+        ]
+    },
+    {
+        "title": "Môn học",
+        "image": "monHoc_logo.png",
+        "style": "height: 150px; margin-top: 1rem;",
+        "content": "Quản lý, sửa đổi thông tin của môn học",
+        "links": [
+            {
+                "url": "/monHoc/edit",
+                "text": "Sửa hồ sơ",
+                "class": "btn btn-primary"
+            },
+            {
+                "url": "/monHoc/search",
+                "text": "Tìm kiếm hồ sơ",
+                "class": "btn btn-success"
+            }
+        ]
+    }
+]

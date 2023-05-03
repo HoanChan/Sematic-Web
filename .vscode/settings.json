@@ -8,5 +8,6 @@
     ],
     "python.analysis.extraPaths": [
         "d:/SOFTS/Anacoda/envs/OpenCV"
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "off"
 }

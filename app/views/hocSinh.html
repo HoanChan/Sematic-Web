@@ -1,0 +1,68 @@
+{% extends "_layout.html" %}
+
+{% block content %}
+
+<!-- Phần bảng điều khiển -->
+<div class="row">
+    <div class="col-md-12">
+        <h2>Danh sách học sinh</h2>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Tìm kiếm theo tên...">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button" id="btnSearch">Tìm kiếm</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <select class="form-control" id="selectLop">
+                <option value="">Tất cả lớp</option>
+                {% for lop in dsLop %}
+                <option value="{{ lop.id }}">{{ lop.ten }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="date" class="form-control" id="inputNgaySinh" placeholder="Tìm kiếm theo ngày sinh...">
+        </div>
+        <div class="form-group">
+            <select class="form-control" id="selectGioiTinh">
+                <option value="">Tất cả giới tính</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-success" type="button" id="btnAdd">Thêm mới</button>
+        </div>
+    </div>
+</div>
+
+<!-- Phần hiển thị dữ liệu -->
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tên</th>
+                    <th>Lớp</th>
+                    <th>Ngày sinh</th>
+                    <th>Giới tính</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody id="tableData">
+                {% for hs in dsHocSinh %}
+                <tr>
+                    <td>{{ hs.ten }}</td>
+                    <td>{{ hs.lop }}</td>
+                    <td>{{ hs.ngay_sinh }}</td>
+                    <td>{{ hs.gioi_tinh }}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" type="button" onclick="editHocSinh({{ hs.id }})">Sửa</button>
+                        <button class="btn btn-danger btn-sm" type="button" onclick="deleteHocSinh({{ hs.id }})">Xoá</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
