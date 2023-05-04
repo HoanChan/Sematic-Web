@@ -14,12 +14,6 @@ def index():
     data =  json.load(open('app/data/cards.json', encoding="utf-8"))
     return render_template("index.html", data=data)
 
-# Route hiển thị thông tin hocSinh
-# @app.route("/hocSinh/show/<string:id>")
-# def showHocSinh(id):
-#     hocSinh = main_controller.get_hocSinh(id)
-#     return render_template("hocSinh.html", hocSinh=hocSinh)
-
 @app.route("/hocSinh")
 def hocSinh():
     dsLop = main_controller.get_dsLop()
@@ -35,6 +29,36 @@ def api_dsHS():
     dsHS = main_controller.search_HS(hoTen, hocLop, ngaySinh, gioiTinh)
     # Đóng gói danh sách học sinh dưới dạng một mảng JSON và trả về cho người dùng
     return jsonify(dsHS)
+
+@app.route('/api/deleteHS', methods=['POST'])
+def api_deleteHS():
+    id = request.form.get('id')
+    result = main_controller.delete_HS(id)
+    return jsonify(result)
+
+@app.route('/api/getHS', methods=['GET'])
+def api_getHS():
+    id = request.args.get('id')
+    hs = main_controller.get_HS(id)
+    print(hs)
+    dsLop = main_controller.get_dsLop()
+    return render_template("_HS.html", dsLop=dsLop, hs=hs)
+
+@app.route('/api/newHS', methods=['GET'])
+def api_newHS():
+    id, hs = main_controller.new_HS()
+    dsLop = main_controller.get_dsLop()
+    return {'id':id, 'html': render_template("_HS.html", dsLop=dsLop, hs=hs)}
+
+@app.route('/api/saveHS', methods=['POST'])
+def api_saveHS():
+    id = request.form.get('id')
+    hoTen = request.form.get('hoTen')
+    hocLop = request.form.get('hocLop')
+    ngaySinh = request.form.get('ngaySinh')
+    gioiTinh = request.form.get('gioiTinh')
+    result = main_controller.save_HS(id, hoTen, hocLop, ngaySinh, gioiTinh)
+    return jsonify(result)
 
 if __name__ == "__main__":
     app.run(debug=True)

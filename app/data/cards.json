@@ -6,7 +6,7 @@
         "content": "Quản lý, sửa đổi thông tin của học sinh",
         "links": [
             {
-                "url": "/hocSinh/edit",
+                "url": "/hocSinh",
                 "text": "Sửa hồ sơ",
                 "class": "btn btn-primary"
             },

@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="inputTen" class="form-label">Họ tên:</label>
+            <input type="text" class="form-control" id="editInputHoTen" value="{{ hs.hoTen }}">
+        </div>
+        <div class="mb-3">
+            <label for="selectLop" class="form-label">Lớp:</label>
+            <select class="form-select" id="editSelectHocLop">
+                <option value="">Chọn lớp</option>
+                {% for lop in dsLop %}
+                <option value="{{ lop.id }}" {% if lop.ten==hs.hocLop.ten %}selected{% endif %}>{{ lop.ten }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="inputNgaySinh" class="form-label">Ngày sinh:</label>
+            <input type="date" class="form-control" id="editInputNgaySinh" value="{% if hs.ngaySinh %}{{ hs.ngaySinh[6:10] }}-{{ hs.ngaySinh[3:5] }}-{{ hs.ngaySinh[0:2] }}{% endif %}">
+        </div>
+        <div class="mb-3">
+            <label for="selectGioiTinh" class="form-label">Giới tính:</label>
+            <select class="form-select" id="editSelectGioiTinh">
+                <option value="Nam" {% if hs.gioiTinh=="Nam" %}selected{% endif %}>Nam</option>
+                <option value="Nữ" {% if hs.gioiTinh=="Nữ" %}selected{% endif %}>Nữ</option>
+                <option value="Khác" {% if hs.gioiTinh=="Khác" %}selected{% endif %}>Khác</option>
+            </select>
+        </div>
+    </div>
+</div>

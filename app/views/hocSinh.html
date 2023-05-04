@@ -3,16 +3,16 @@
 {% block head %}
 <style>
     @media(min-width: 768px) {
-    .form-group {
-        margin-bottom: 0;
-    }
+        .form-group {
+            margin-bottom: 0;
+        }
 
-    .form-group label {
-        display: inline-block;
-        width: 120px;
-        margin-right: 10px;
+        .form-group label {
+            display: inline-block;
+            width: 120px;
+            margin-right: 10px;
+        }
     }
-}
 </style>
 {% endblock %}
 {% block content %}
@@ -33,7 +33,7 @@
                     <select class="form-control" id="selectLop">
                         <option value="">Tất cả</option>
                         {% for lop in dsLop %}
-                        <option value="{{ lop }}">{{ lop }}</option>
+                        <option value="{{ lop.id }}">{{ lop.ten }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -97,25 +97,20 @@
 {% block script %}
 <script>
     $(document).ready(function () {
-        // Xử lý sự kiện click của nút tìm kiếm
         $('#btnSearch').click(function () {
-            // Lấy giá trị từ các input
             var hoTen = $('#inputSearch').val();
             var hocLop = $('#selectLop').val();
             var ngaySinh = $('#inputNgaySinh').val();
             var gioiTinh = $('#selectGioiTinh').val();
 
-            // Gọi API để lấy danh sách học sinh
             $.get('/api/dsHS', {
                 hoTen: hoTen,
                 hocLop: hocLop,
                 ngaySinh: ngaySinh,
                 gioiTinh: gioiTinh
             }, function (data) {
-                // Xoá các hàng hiện có trong bảng
                 $('#tableData').empty();
 
-                // Tạo các hàng mới từ kết quả nhận được từ API
                 $.each(data, function (index, hs) {
                     var row = '<tr>';
                     row += '<td>' + hs.hoTen + '</td>';
@@ -123,14 +118,104 @@
                     row += '<td>' + hs.ngaySinh + '</td>';
                     row += '<td>' + hs.gioiTinh + '</td>';
                     row += '<td>';
-                    row += '<button class="btn btn-primary btn-sm" type="button" onclick="editHocSinh(' + hs.id + ')">Sửa</button>';
-                    row += '<button class="btn btn-danger btn-sm" type="button" onclick="deleteHocSinh(' + hs.id + ')">Xoá</button>';
+                    row += '<button class="btn btn-primary btn-sm" type="button" onclick="editHocSinh(\'' + hs.id + '\')">Sửa</button>';
+                    row += '<button class="btn btn-danger btn-sm" type="button" onclick="deleteHocSinh(\'' + hs.id + '\')">Xoá</button>';
                     row += '</td>';
                     row += '</tr>';
                     $('#tableData').append(row);
                 });
             });
         });
+        $('#btnAdd').click(function(){
+            $.get('/api/newHS', {}, function (data) {
+                var modal = `
+                <div class="modal fade" id="modalNewHocSinh" tabindex="-1" aria-labelledby="modalNewHocSinhLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalNewHocSinhLabel">Thêm mới học sinh</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${data.html}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" onclick="$('#modalNewHocSinh').modal('hide');saveHocSinh('${data.id}')">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `
+                $('body').append(modal);
+                $('#modalNewHocSinh').modal('show');
+                $('#modalNewHocSinh').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                    $('#modalNewHocSinh').remove();
+                })
+            });
+        })
     });
+    function deleteHocSinh(id) {
+        if (confirm("Bạn có chắc chắn muốn xoá học sinh này?")) {
+            $.post('/api/deleteHS', {
+                id: id
+            }, function (data) {
+                if (data) {
+                    //alert("Xoá học sinh thành công!");
+                    $('#btnSearch').click();
+                } else {
+                    alert("Xoá học sinh thất bại!");
+                }
+            });
+        }
+    }
+    function editHocSinh(id) {
+        $.get('/api/getHS', {
+            id: id
+        }, function (data) {
+            var modal = `
+            <div class="modal fade" id="modalEditHocSinh" tabindex="-1" aria-labelledby="modalEditHocSinhLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditHocSinhLabel">Chỉnh sửa thông tin học sinh</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ${data}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="$('#modalEditHocSinh').modal('hide');saveHocSinh('${id}')">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+            $('body').append(modal);
+            $('#modalEditHocSinh').modal('show');
+            $('#modalEditHocSinh').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                $('#modalEditHocSinh').remove();
+            })
+        });
+    }
+    function saveHocSinh(id) {
+        var hoTen = $('#editInputHoTen').val();
+        var hocLop = $('#editSelectHocLop').val();
+        var ngaySinh = $('#editInputNgaySinh').val();
+        var gioiTinh = $('#editSelectGioiTinh').val();
+        $.post('/api/saveHS', {
+            id: id,
+            hoTen: hoTen,
+            hocLop: hocLop,
+            ngaySinh: ngaySinh,
+            gioiTinh: gioiTinh
+        }, function (data) {
+            if (data) {
+                //alert("Sửa học sinh thành công!");
+                $('#btnSearch').click();
+            } else {
+                alert("Sửa học sinh thất bại!");
+            }
+        });
+    }
 </script>
 {% endblock %}
