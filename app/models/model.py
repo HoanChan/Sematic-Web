@@ -1,7 +1,8 @@
 from owlready2 import *
 
 # Tạo ontology
-onto = get_ontology("http://hc.com/school")
+# onto = get_ontology("http://hc.com/school")
+onto = get_ontology("app/data/education.owl").load()
 with onto:
     class ChucVu(Thing): pass
     class ToChuc(Thing): pass
