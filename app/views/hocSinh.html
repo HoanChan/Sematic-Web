@@ -100,15 +100,15 @@
         // Xử lý sự kiện click của nút tìm kiếm
         $('#btnSearch').click(function () {
             // Lấy giá trị từ các input
-            var tenHS = $('#inputSearch').val();
-            var lop = $('#selectLop').val();
+            var hoTen = $('#inputSearch').val();
+            var hocLop = $('#selectLop').val();
             var ngaySinh = $('#inputNgaySinh').val();
             var gioiTinh = $('#selectGioiTinh').val();
 
             // Gọi API để lấy danh sách học sinh
             $.get('/api/dsHS', {
-                tenHS: tenHS,
-                lop: lop,
+                hoTen: hoTen,
+                hocLop: hocLop,
                 ngaySinh: ngaySinh,
                 gioiTinh: gioiTinh
             }, function (data) {

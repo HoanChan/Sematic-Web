@@ -14,26 +14,28 @@ class MainController:
     def get_dsLop(self):
         return [lop.ten for lop in onto.LopHoc.instances()]
     
-    def search_HS(self, tenHS, lop, ngaySinh, gioiTinh): 
+    def search_HS(self, hoTen, hocLop, ngaySinh, gioiTinh):
         query_str = """
         PREFIX s: <http://hc.com/school#>
         SELECT ?hs
         WHERE {
             ?hs a s:HocSinh.
-            ?hs s:hoTen ?hoTen.
-            ?hs s:ngaySinh ?ngaySinh.
-            ?hs s:gioiTinh ?gioiTinh.
-            ?hs s:hocLop ?lop.
         """
-        if tenHS: query_str += f'\n FILTER(REGEX(?hoTen, "{tenHS}","i")).'
-        # if lop: query_str += '; :hocLop ?"' + lop + '"'
-        # if ngaySinh: query_str += '; :ngaySinh ?"' + ngaySinh + '"'
-        # if gioiTinh: query_str += '; :gioiTinh ?"' + gioiTinh + '"'
-        query_str += '\n}'
+        if hoTen: query_str += '?hs s:hoTen ?hoTen.' + f'FILTER(REGEX(?hoTen, ".*{hoTen}.*","i")).'
+        if hocLop: query_str += '?hs s:hocLop ?lop. ?lop s:ten ?tenLop.' + f'FILTER(REGEX(?tenLop, ".*{hocLop}.*","i")).'
+        if ngaySinh: 
+            dateParts = ngaySinh.split("-")
+            if len(dateParts) == 3: # Xủ lý ngày tháng năm do bên js giởi lên có dạng yyyy-mm-dd
+                ngaySinh = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0]
+            query_str += f'?hs s:ngaySinh "{ngaySinh}".'
+        if gioiTinh: query_str += f'?hs s:gioiTinh "{gioiTinh}".'
+        query_str += '}'
+        print(query_str)
         result = default_world.sparql(query_str)
         dsHS = []
         if result:
-            dsHS = list(map(lambda hs: {'hoTen': hs[0].hoTen, 
+            dsHS = list(map(lambda hs: {'id': hs[0].iri.split('#')[1],
+                                        'hoTen': hs[0].hoTen, 
                                         'hocLop': hs[0].hocLop.ten, 
                                         'ngaySinh': hs[0].ngaySinh, 
                                         'gioiTinh': hs[0].gioiTinh}, result))

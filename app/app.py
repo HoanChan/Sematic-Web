@@ -28,11 +28,11 @@ def hocSinh():
 
 @app.route('/api/dsHS', methods=['GET'])
 def api_dsHS():
-    tenHS = request.args.get('tenHS')
-    lop = request.args.get('lop')
+    hoTen = request.args.get('hoTen')
+    hocLop = request.args.get('hocLop')
     ngaySinh = request.args.get('ngaySinh')
     gioiTinh = request.args.get('gioiTinh')
-    dsHS = main_controller.search_HS(tenHS, lop, ngaySinh, gioiTinh)
+    dsHS = main_controller.search_HS(hoTen, hocLop, ngaySinh, gioiTinh)
     # Đóng gói danh sách học sinh dưới dạng một mảng JSON và trả về cho người dùng
     return jsonify(dsHS)
 
