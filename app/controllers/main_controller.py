@@ -1,4 +1,4 @@
-from models.model import onto, default_world, destroy_entity
+from models import onto, default_world, destroy_entity
 from utils import toDate
 class MainController:
     def get_HS(self):
