@@ -33,12 +33,11 @@ with onto:
     # -------- Các thuộc tính của Đối tượng -------- #
     # InverseFunctionalProperty: Giống khoá chính trong SQL, không được trùng
     # FunctionalProperty: chỉ nhận 1 giá trị duy nhất (Không thể có tên)
-    class ten(DatatypeProperty, FunctionalProperty):
-        domain = [ChucVu, ToChuc, LopHoc, MonHoc, NhaXuatBan, Sach, TheLoai, Phong, HoatDong]
-        range = [str]
     # -------- Các thuộc tính của Chức vụ -------- #
+    class ten(ChucVu >> str, FunctionalProperty): pass
     class phuCap(ChucVu >> float, FunctionalProperty): pass
     # -------- Các thuộc tính của Tổ chức -------- #
+    class ten(ToChuc >> str, FunctionalProperty): pass
     class thanhVien(ToChuc >> Nguoi): pass
     class phong(ToChuc >> Phong): pass
     # -------- Các thuộc tính của Người -------- #
@@ -69,7 +68,8 @@ with onto:
     class giangDay(GiaoVien >> GiangDay): pass
     class lopChuNhiem(GiaoVien >> LopHoc, FunctionalProperty): 
         inverse_property = giaoVienChuNhiem
-    # -------- Các thuộc tính của Môn học -------- #
+    # -------- Các thuộc tính của Môn học -------- #    
+    class ten(MonHoc >> str, FunctionalProperty): pass
     class giaoVienDay(MonHoc >> GiaoVien):
         inverse_property = dayMon
     class soTiet(MonHoc >> int, FunctionalProperty): pass
@@ -90,32 +90,39 @@ with onto:
     class ngayCap(TheDocGia >> datetime.date, FunctionalProperty): pass
     class ngayHetHan(TheDocGia >> datetime.date, FunctionalProperty): pass
     class sachDaDoc(TheDocGia >> Sach): pass
-    # -------- Các thuộc tính của Tác giả + Nhà xuất bản -------- #
-    class dsSach(ObjectProperty): 
-        domain = [TacGia, NhaXuatBan, TheLoai]
-        range = [Sach]    
+    # -------- Các thuộc tính của Tác giả -------- #
+    class ten(TacGia >> str, FunctionalProperty): pass
+    class dsSach(TacGia >> Sach): pass
+    # -------- Nhà xuất bản -------- #
+    class ten(NhaXuatBan >> str, FunctionalProperty): pass
+    class dsSach(NhaXuatBan >> Sach): pass
     # -------- Các thuộc tính của Sách -------- #
+    class ten(Sach >> str, FunctionalProperty): pass
     class tacGia(Sach >> TacGia, FunctionalProperty): pass
     class nhaXuatBan(Sach >> NhaXuatBan, FunctionalProperty): pass
     class theLoai(Sach >> TheLoai): pass
     class giaTien(Sach >> int, FunctionalProperty): pass
     class soLuong(Sach >> int, FunctionalProperty): pass
     # -------- Các thuộc tính của Thể loại -------- #
-    
+    class ten(TheLoai >> str, FunctionalProperty): pass
+    class dsSach(TheLoai >> Sach): pass
     # -------- Các thuộc tính của Phiếu mượn -------- #
     class theDocGia(PhieuMuon >> TheDocGia, FunctionalProperty): pass
     class ngayMuon(PhieuMuon >> datetime.date, FunctionalProperty): pass
     class ngayTra(PhieuMuon >> datetime.date, FunctionalProperty): pass
     class sachMuon(PhieuMuon >> Sach): pass
     # -------- Các thuộc tính của Phòng -------- #
-    class suDungBoi(Phong >> ToChuc): pass
+    class ten(Phong >> str, FunctionalProperty): pass
+    class suDungBoi(Phong >> ToChuc): 
+        inverse_property = phong
     # -------- Các thuộc tính của Hoạt động -------- #
+    class ten(HoatDong >> str, FunctionalProperty): pass
     class ngayBatDau(HoatDong >> datetime.date, FunctionalProperty): pass
     class ngayKetThuc(HoatDong >> datetime.date, FunctionalProperty): pass
     class quanLy(HoatDong >> Nguoi): pass
     class thamGia(HoatDong >> Nguoi): pass
     # -------- Các thuộc tính của Điểm danh -------- #
-    class nguoiDiemDanh(DiemDanh >> Nguoi, FunctionalProperty): pass
+    class nguoi(DiemDanh >> Nguoi, FunctionalProperty): pass
     class hoatDong(DiemDanh >> HoatDong, FunctionalProperty): pass
     class ngayGio(DiemDanh >> datetime.datetime, FunctionalProperty): pass
     class trangThai(DiemDanh >> str, FunctionalProperty): pass
