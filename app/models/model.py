@@ -36,12 +36,8 @@ with onto:
     class ten(DatatypeProperty, FunctionalProperty):
         domain = [ChucVu, ToChuc, LopHoc, MonHoc, NhaXuatBan, Sach, TheLoai, Phong, HoatDong]
         range = [str]
-    class moTa(ObjectProperty, FunctionalProperty): 
-        domain = [ChucVu, MonHoc, Phong, TheLoai, HoatDong]
-        range = [str]
     # -------- Các thuộc tính của Chức vụ -------- #
-    class phuCap(ChucVu >> int, FunctionalProperty): pass
-    class toChuc(ChucVu >> ToChuc): pass
+    class phuCap(ChucVu >> float, FunctionalProperty): pass
     # -------- Các thuộc tính của Tổ chức -------- #
     class thanhVien(ToChuc >> Nguoi): pass
     class phong(ToChuc >> Phong): pass
@@ -49,11 +45,11 @@ with onto:
     class hoTen(Nguoi >> str, FunctionalProperty): pass
     class ngaySinh(Nguoi >> datetime.date, FunctionalProperty): pass
     class gioiTinh(Nguoi >> str, FunctionalProperty): pass
-    class thuocToChuc(Nguoi >> ToChuc): 
+    class toChuc(Nguoi >> ToChuc): 
         inverse_property = thanhVien # Đảo ngược thuộc tính, nếu có 1 người thuộc 1 tổ chức thì tổ chức đó có 1 thành viên là người đó
     # -------- Các thuộc tính của Nhân viên -------- #
     class chucVu(NhanVien >> ChucVu): pass
-    class luong(NhanVien >> int, FunctionalProperty): pass
+    class heSoLuong(NhanVien >> float, FunctionalProperty): pass
     # -------- Các thuộc tính của Phụ huynh -------- #
     class ngheNghiep(Nguoi >> str, FunctionalProperty): pass
     class con(PhuHuynh >> HocSinh): pass
