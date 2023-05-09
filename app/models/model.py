@@ -51,7 +51,7 @@ with onto:
     class chucVu(NhanVien >> ChucVu): pass
     class heSoLuong(NhanVien >> float, FunctionalProperty): pass
     # -------- Các thuộc tính của Phụ huynh -------- #
-    class ngheNghiep(Nguoi >> str, FunctionalProperty): pass
+    class ngheNghiep(PhuHuynh >> str, FunctionalProperty): pass
     class con(PhuHuynh >> HocSinh): pass
     # -------- Các thuộc tính của Lớp học -------- #
     class giaoVienChuNhiem(LopHoc >> GiaoVien, FunctionalProperty): pass
