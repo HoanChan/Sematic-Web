@@ -19,6 +19,7 @@ with onto:
             return ' - '.join([self.hoTen, self.ngaySinh, self.gioiTinh, self.trinhDo, [mon.ten for mon in self.dayMon], getattr(self.lopChuNhiem,'ten','')])
     class MonHoc(Thing): pass
     class DiemSo(Thing): pass
+    class GiangDay(Thing): pass
     class TheDocGia(Thing): pass
     class TacGia(Thing): pass
     class NhaXuatBan(Thing): pass
@@ -69,6 +70,7 @@ with onto:
     # -------- Các thuộc tính của Giáo viên -------- #
     class dayMon(GiaoVien >> MonHoc):pass
     class trinhDo(GiaoVien >> str, FunctionalProperty): pass
+    class giangDay(GiaoVien >> GiangDay): pass
     class lopChuNhiem(GiaoVien >> LopHoc, FunctionalProperty): 
         inverse_property = giaoVienChuNhiem
     # -------- Các thuộc tính của Môn học -------- #
@@ -82,6 +84,11 @@ with onto:
     class heSo1(DiemSo >> float): pass
     class heSo2(DiemSo >> float): pass
     class heSo3(DiemSo >> float): pass
+    # -------- Các thuộc tính của Giảng dạy -------- #
+    class giaoVien(GiangDay >> GiaoVien, FunctionalProperty): 
+        inverse_property = giangDay
+    class lopHoc(GiangDay >> LopHoc, FunctionalProperty): pass
+    class monHoc(GiangDay >> MonHoc, FunctionalProperty): pass
     # -------- Các thuộc tính của Thẻ Đọc giả -------- #
     class docGia(TheDocGia >> Nguoi, FunctionalProperty): pass
     class ngayCap(TheDocGia >> datetime.date, FunctionalProperty): pass
