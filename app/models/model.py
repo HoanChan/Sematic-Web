@@ -20,7 +20,7 @@ with onto:
     class MonHoc(Thing): pass
     class DiemSo(Thing): pass
     class GiangDay(Thing): pass
-    class TheDocGia(Thing): pass
+    class DocGia(Thing): pass
     class TacGia(Thing): pass
     class NhaXuatBan(Thing): pass
     class Sach(Thing): pass
@@ -86,10 +86,10 @@ with onto:
     class lopHoc(GiangDay >> LopHoc, FunctionalProperty): pass
     class monHoc(GiangDay >> MonHoc, FunctionalProperty): pass
     # -------- Các thuộc tính của Thẻ Đọc giả -------- #
-    class docGia(TheDocGia >> Nguoi, FunctionalProperty): pass
-    class ngayCap(TheDocGia >> datetime.date, FunctionalProperty): pass
-    class ngayHetHan(TheDocGia >> datetime.date, FunctionalProperty): pass
-    class sachDaDoc(TheDocGia >> Sach): pass
+    class docGia(DocGia >> Nguoi, FunctionalProperty): pass
+    class ngayCap(DocGia >> datetime.date, FunctionalProperty): pass
+    class ngayHetHan(DocGia >> datetime.date, FunctionalProperty): pass
+    class sachDaDoc(DocGia >> Sach): pass
     # -------- Các thuộc tính của Tác giả -------- #
     class ten(TacGia >> str, FunctionalProperty): pass
     class dsSach(TacGia >> Sach): pass
@@ -107,7 +107,7 @@ with onto:
     class ten(TheLoai >> str, FunctionalProperty): pass
     class dsSach(TheLoai >> Sach): pass
     # -------- Các thuộc tính của Phiếu mượn -------- #
-    class theDocGia(PhieuMuon >> TheDocGia, FunctionalProperty): pass
+    class docGia(PhieuMuon >> DocGia, FunctionalProperty): pass
     class ngayMuon(PhieuMuon >> datetime.date, FunctionalProperty): pass
     class ngayTra(PhieuMuon >> datetime.date, FunctionalProperty): pass
     class sachMuon(PhieuMuon >> Sach): pass
