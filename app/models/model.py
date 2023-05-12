@@ -54,7 +54,7 @@ with onto:
     class con(PhuHuynh >> HocSinh): pass
     # -------- Các thuộc tính của Lớp học -------- #
     class giaoVienChuNhiem(LopHoc >> GiaoVien, FunctionalProperty): pass
-    class phongHoc(LopHoc >> Phong, FunctionalProperty): pass
+    class phong(LopHoc >> Phong): pass
     class dsHocSinh(LopHoc >> HocSinh): pass
     # -------- Các thuộc tính của Học sinh -------- #
     class hocLop(HocSinh >> LopHoc, FunctionalProperty): 
