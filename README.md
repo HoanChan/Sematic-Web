@@ -76,3 +76,7 @@ Trong đó:
 - `main.py` là file chính của ứng dụng, sẽ được sử dụng để chạy ứng dụng.
 
 Với cấu trúc này, dự án được tổ chức theo mô hình MVC (Model-View-Controller), giúp tách biệt các phần của ứng dụng để dễ dàng bảo trì và phát triển.
+
+## Cài đặt
+- Owlready2: conda install -c conda-forge owlready2
+- jdk: conda install -c cyclus java-jdk
