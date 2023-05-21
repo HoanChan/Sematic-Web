@@ -8,15 +8,15 @@ with onto:
     class Nguoi(Thing): pass
     class NhanVien(Nguoi): pass
     class PhuHuynh(Nguoi): pass
-    class LopHoc(ToChuc):
-        def __str__(self):
-            return ' - '.join([self.ten, getattr(self.giaoVienChuNhiem,'hoTen',''), getattr(self.phongHoc,'ten','')])
-    class HocSinh(Nguoi): 
-        def __str__(self):
-            return ' - '.join([self.hoTen, self.ngaySinh, self.gioiTinh, getattr(self.hocLop,'ten','')])
-    class GiaoVien(NhanVien): 
-        def __str__(self):
-            return ' - '.join([self.hoTen, self.ngaySinh, self.gioiTinh, self.trinhDo, [mon.ten for mon in self.dayMon], getattr(self.lopChuNhiem,'ten','')])
+    class LopHoc(ToChuc): pass
+        # def __str__(self):
+        #     return ' - '.join([self.ten, getattr(self.giaoVienChuNhiem,'hoTen',''), getattr(self.phongHoc,'ten','')])
+    class HocSinh(Nguoi): pass
+        # def __str__(self):
+        #     return ' - '.join([self.hoTen, self.ngaySinh, self.gioiTinh, getattr(self.hocLop,'ten','')])
+    class GiaoVien(NhanVien): pass
+        # def __str__(self):
+        #     return ' - '.join([self.hoTen, self.ngaySinh, self.gioiTinh, self.trinhDo, [mon.ten for mon in self.dayMon], getattr(self.lopChuNhiem,'ten','')])
     class MonHoc(Thing): pass
     class DiemSo(Thing): pass
     class GiangDay(Thing): pass
