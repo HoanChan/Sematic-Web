@@ -18,6 +18,9 @@ def createRandomFromDate(start:str, end:str): #01/01/2022
     birth_date = start_date + datetime.timedelta(days=random_days)
     return  birth_date
 
+def createRandomJob():
+    return random.choice(["Nông dân", "Công nhân", "Giáo viên", "Bác sĩ", "Kỹ sư", "Nhân viên văn phòng", "Chủ doanh nghiệp"])
+
 def createRandomInfo():
     ho = random.choice(["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Võ", "Đặng", "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", "Lý", "Lương", "Mai", "Trương", "Tạ", "Đào", 
                             "Đoàn", "Đinh", "Lâm", "Phùng", "Đoàn", "Bành", "Quách", "Thái", "Tô", "Tôn", "Tăng"])
@@ -26,8 +29,11 @@ def createRandomInfo():
                             "Sơn", "Thảo", "Thiên", "Thiện", "Thúy", "Thuận", "Tùng", "Tú", "Tường", "Việt", "Vân", "Vinh", "Xuân"])
     gioiTinh = random.choice(["Nam", "Nữ"])
     return f"{ho} {lot} {ten}", gioiTinh
+
 def randScore():
-    score = random.randint(0, 10)
+    score = round(random.gauss(7, 2.5), 0)
+    if score < 0: score = 0
+    if score > 10: score = 10
     if score != 10:
         score += random.choice([0.3, 0.5, 0.8])
     return score
@@ -42,7 +48,7 @@ def getClassName(soLopMoiKhoi, index):
         return f'{tenLop}{lop}'
     
 
-def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon = 3, soGVDay2Mon = 5, soDocGia = 10, soSach = 15, soTacGia = 5, soNXB = 3):   
+def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon = 3, soGVDay2Mon = 5):   
     dsLop, dsHS, dsPhong  = [], [], []
     tongSoLop = soLopMoiKhoi * 3
     for i in range(tongSoLop):
@@ -57,22 +63,20 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
             hs = HocSinh(hoTen = ten, ngaySinh = createRandomDate(2000, 2000), gioiTinh = gt, hocLop = lop)
             dsHS.append(hs)
             # Tạo ngẫu nhiên 2 PH cho mỗi HS
-            for k in range(2):
-                ten, gt = createRandomInfo()
-                nghe = random.choice(["Nông dân", "Công nhân", "Giáo viên", "Bác sĩ", "Kỹ sư", "Nhân viên văn phòng", "Chủ doanh nghiệp"])
-                ph = PhuHuynh(hoTen = ten, ngaySinh = createRandomDate(1970, 1980), gioiTinh = gt, con = [hs], ngheNghiep = nghe)
+            ten, gt = createRandomInfo()
+            hs.cha = Cha(hoTen = ten, ngaySinh = createRandomDate(1970, 1980), gioiTinh = "Nam", ngheNghiep = createRandomJob())
+            ten, gt = createRandomInfo()
+            hs.me = Me(hoTen = ten, ngaySinh = createRandomDate(1970, 1980), gioiTinh = "Nữ",  ngheNghiep = createRandomJob())
         
     # Cho một số học sinh có chung phụ huynh
     random_items = random.sample(dsHS, soHSCoAnhEm)
     remaining_items = list(set(dsHS) - set(random_items))
     new_random_items = random.sample(remaining_items, soHSCoAnhEm)
-    for hs, i in zip(random_items, range(soHSCoAnhEm)):
-        for ph in hs.phuHuynh: destroy_entity(ph)
-        hs.phuHuynh = []
-        for ph in new_random_items[i].phuHuynh: 
-            ph.con.append(hs)
-            hs.phuHuynh.append(ph)
-
+    for hs1, hs2 in zip(random_items, new_random_items):
+        destroy_entity(hs1.cha)
+        destroy_entity(hs1.me)
+        hs1.cha = hs2.cha
+        hs1.me = hs2.me
 
     dsGV, dsMonHoc, dsToChuc, dsChucVu = [], [], [], []
 
@@ -97,17 +101,27 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
         for j in range(soGVMoiMon):
             ten, gt = createRandomInfo()
             td = ['Đại học', 'Thạc sĩ'][random.randint(0,1)]
-            gv = GiaoVien(hoTen = ten, ngaySinh = createRandomDate(1970, 1990), gioiTinh = gt, trinhDo = td, dayMon = [mon_hoc], toChuc = [toChuyenMon], heSoLuong = random.uniform(1, 9))
+            gv = GiaoVien(hoTen = ten, ngaySinh = createRandomDate(1970, 1990), gioiTinh = gt, trinhDo = td, dayMon = [mon_hoc], toChuc = [toChuyenMon], heSoLuong = round(random.uniform(1, 9),1))
             if j == 0: gv.chucVu = [toTruong, giaoVien]
             elif j == 1: gv.chucVu = [toPho, giaoVien]   
             else: gv.chucVu = [giaoVien]         
             dsGV.append(gv)
         # Tạo điểm số cho từng HS
         for hs in dsHS:
-            diem = DiemSo(hocSinh = hs, monHoc = mon_hoc, 
-                            heSo1 = [randScore(),randScore(),randScore()], 
-                            heSo2 = [randScore(),randScore()], 
-                            heSo3 = [randScore()])
+            hs1 = [randScore(),randScore(),randScore()]
+            hs2 = [randScore()]
+            hs3 = [randScore()]
+            diemTB = round((sum(hs1) + sum(hs2)*2 + sum(hs3)*3) / (len(hs1) + len(hs2)*2 + len(hs3)*3),2)
+            diem = DiemSo(hocSinh = hs, monHoc = mon_hoc, heSo1 = hs1, heSo2 = hs2, heSo3 = hs3, diemTB = diemTB)
+
+    # Tính điểm trung bình tất cả các môn của từng HS
+    for hs in dsHS:
+        hs.diemTB = round(sum(d.diemTB for d in hs.diemSo) / len(hs.diemSo),2)
+        # Tính hạnh kiểm
+        if hs.diemTB >= 6.5: hs.hanhKiem = random.choice(['Tốt','Khá'])
+        elif hs.diemTB >= 5: hs.hanhKiem = random.choice(['Khá','Trung bình'])
+        else: hs.hanhKiem = random.choice(['Trung bình','Yếu'])
+
     # Chọn ngẫu nhiên các giáo viên làm tổ trưởng, tổ phó
     # Cho một số GV dạy 2 môn
     gvKhongChucVu = [gv for gv in dsGV if len(gv.chucVu) == 1]
@@ -165,7 +179,7 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
         # Tạo nhân viên
         for i in range(soNV):
             ten, gt = createRandomInfo()
-            nv = NhanVien(hoTen = ten, ngaySinh = createRandomDate(1960, 1995), gioiTinh = gt, toChuc = [tc], chucVu = [cv], heSoLuong = random.uniform(1, 9))
+            nv = NhanVien(hoTen = ten, ngaySinh = createRandomDate(1960, 1995), gioiTinh = gt, toChuc = [tc], chucVu = [cv], heSoLuong = round(random.uniform(1, 9),1))
             dsNV.append(nv)
             phong = Phong(ten = f'Phòng {cv.ten} {i+1}' if soNV > 1 else f'Phòng {cv.ten}')
             tc.phong.append(phong)
@@ -180,47 +194,6 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
     nv = [nv for nv in dsNV if nv.chucVu[0].ten == 'Văn thư'][0]
     nv.chucVu.append(toPho)
 
-    # Tạo ngẫu nhiên tác giả
-    dsTacGia = []
-    for i in range(soTacGia):
-        tg = TacGia(ten = f'Tác giả {i+1}')
-        dsTacGia.append(tg)
-
-    # Tạo ngẫu nhiên NXB
-    dsNXB = []
-    for i in range(soNXB):
-        nxb = NhaXuatBan(ten = f'NXB {i+1}')
-        dsNXB.append(nxb)
-    # Tạo ngẫu nhiên thể loại sách
-    dsTheLoai = []
-    dsTenTheLoai = ["SGK", "Sách bài tập", "Tài liệu tham khảo", "Truyện tranh"]
-    for theLoai in dsTenTheLoai:
-        tl = TheLoai(ten = theLoai)
-        dsTheLoai.append(tl)
-    # Tạo ngẫu nhiên sách
-    dsSach = []
-    dsTenMonHoc = [mon.ten for mon in dsMonHoc]
-    for i in range(soSach):
-        ten = random.choice(dsTenTheLoai) + ' ' + random.choice(dsTenMonHoc)
-        sach = Sach(ten = ten, tacGia = random.choice(dsTacGia), nhaXuatBan = random.choice(dsNXB), theLoai = random.choices(dsTheLoai,k=random.randint(1,2)), namXuatBan = random.randint(1920, 2021), giaTien = random.randint(1, 200)*1000)
-        dsSach.append(sach)
-
-    # Tạo ngẫu nhiên đọc giả
-    dsDocGia = []
-    dsMuonSach=[]
-    nguoi = random.sample(dsGV+dsHS+dsNV, soDocGia)
-    for i in range(soDocGia):
-        ten, gt = createRandomInfo()
-        docGia = DocGia(docGia = nguoi[i], ngayCap = createRandomDate(2022, 2023), ngayHetHan = createRandomDate(2024, 2025))
-        dsDocGia.append(docGia)
-        # Tạo ngẫu nhiên mượn sách
-        soSachMuon = random.randint(1, 5)
-        for j in range(soSachMuon):
-            sach = random.choice(dsSach)
-            muon = PhieuMuon(docGia = docGia, sachMuon = random.choices(dsSach, k=random.randint(1,3)), ngayMuon = createRandomFromDate('05/09/2021', '31/12/2021'), ngayTra = createRandomFromDate('01/01/2022', '15/05/2022'))
-            dsMuonSach.append(muon)
-
-
     dsTenHoatDong = ['Học tập', 'Thể thao', 'Văn hóa', 'Nghệ thuật', 'Tình nguyện', 'Khoa học', 'Kỹ năng sống', 'Ngoại khóa']
     dsHoatDong = []
     for ten in dsTenHoatDong:
@@ -233,5 +206,5 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
     dsDiemDanh = []
     for hd in dsHoatDong:
         for hs in hd.thamGia:
-            diemDanh = DiemDanh(hoatDong = hd, nguoi = hs, ngayGio = createDateTime(hd.ngayBatDau, random.randint(7, 9)), trangThai = random.choice(['Đúng giờ', 'Trễ', 'Vắng']))
+            diemDanh = DiemDanh(hoatDong = hd, nguoi = hs, ngayGio = createDateTime(hd.ngayBatDau, random.randint(7, 9)), trangThai = random.choice(['Có mặt', 'Vắng']))
             dsDiemDanh.append(diemDanh)

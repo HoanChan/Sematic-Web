@@ -8,24 +8,17 @@ with onto:
     class Nguoi(Thing): pass
     class NhanVien(Nguoi): pass
     class PhuHuynh(Nguoi): pass
+    class Cha(PhuHuynh): pass
+    class Me(PhuHuynh): pass
     class LopHoc(ToChuc): pass
-        # def __str__(self):
-        #     return ' - '.join([self.ten, getattr(self.giaoVienChuNhiem,'hoTen',''), getattr(self.phongHoc,'ten','')])
     class HocSinh(Nguoi): pass
-        # def __str__(self):
-        #     return ' - '.join([self.hoTen, self.ngaySinh, self.gioiTinh, getattr(self.hocLop,'ten','')])
+    class Anh(HocSinh): pass
+    class Chi(HocSinh): pass
+    class Em(HocSinh): pass
     class GiaoVien(NhanVien): pass
-        # def __str__(self):
-        #     return ' - '.join([self.hoTen, self.ngaySinh, self.gioiTinh, self.trinhDo, [mon.ten for mon in self.dayMon], getattr(self.lopChuNhiem,'ten','')])
     class MonHoc(Thing): pass
     class DiemSo(Thing): pass
     class GiangDay(Thing): pass
-    class DocGia(Thing): pass
-    class TacGia(Thing): pass
-    class NhaXuatBan(Thing): pass
-    class Sach(Thing): pass
-    class TheLoai(Thing): pass
-    class PhieuMuon(Thing): pass
     class Phong(Thing): pass
     class HoatDong(Thing): pass
     class DiemDanh(Thing): pass
@@ -57,11 +50,13 @@ with onto:
     class phong(LopHoc >> Phong): pass
     class dsHocSinh(LopHoc >> HocSinh): pass
     # -------- Các thuộc tính của Học sinh -------- #
-    class hocLop(HocSinh >> LopHoc, FunctionalProperty): 
-        inverse_property = dsHocSinh
-    class phuHuynh(HocSinh >> PhuHuynh): 
-        inverse_property = con
+    class hocLop(HocSinh >> LopHoc, FunctionalProperty): inverse_property = dsHocSinh
+    class phuHuynh(HocSinh >> PhuHuynh): inverse_property = con
+    class me(HocSinh >> Me, FunctionalProperty): is_a = [phuHuynh]        
+    class cha(HocSinh >> Cha, FunctionalProperty): is_a = [phuHuynh]        
     class diemSo(HocSinh >> DiemSo): pass
+    class diemTB(HocSinh >> float, FunctionalProperty): pass
+    class hanhKiem(HocSinh >> str, FunctionalProperty): pass
     # -------- Các thuộc tính của Giáo viên -------- #
     class dayMon(GiaoVien >> MonHoc):pass
     class trinhDo(GiaoVien >> str, FunctionalProperty): pass
@@ -80,41 +75,14 @@ with onto:
     class heSo1(DiemSo >> float): pass
     class heSo2(DiemSo >> float): pass
     class heSo3(DiemSo >> float): pass
+    class diemTB(DiemSo >> float, FunctionalProperty): pass
     # -------- Các thuộc tính của Giảng dạy -------- #
-    class giaoVien(GiangDay >> GiaoVien, FunctionalProperty): 
-        inverse_property = giangDay
+    class giaoVien(GiangDay >> GiaoVien, FunctionalProperty): inverse_property = giangDay
     class lopHoc(GiangDay >> LopHoc, FunctionalProperty): pass
     class monHoc(GiangDay >> MonHoc, FunctionalProperty): pass
-    # -------- Các thuộc tính của Thẻ Đọc giả -------- #
-    class docGia(DocGia >> Nguoi, FunctionalProperty): pass
-    class ngayCap(DocGia >> datetime.date, FunctionalProperty): pass
-    class ngayHetHan(DocGia >> datetime.date, FunctionalProperty): pass
-    class sachDaDoc(DocGia >> Sach): pass
-    # -------- Các thuộc tính của Tác giả -------- #
-    class ten(TacGia >> str, FunctionalProperty): pass
-    class dsSach(TacGia >> Sach): pass
-    # -------- Nhà xuất bản -------- #
-    class ten(NhaXuatBan >> str, FunctionalProperty): pass
-    class dsSach(NhaXuatBan >> Sach): pass
-    # -------- Các thuộc tính của Sách -------- #
-    class ten(Sach >> str, FunctionalProperty): pass
-    class tacGia(Sach >> TacGia, FunctionalProperty): pass
-    class nhaXuatBan(Sach >> NhaXuatBan, FunctionalProperty): pass
-    class theLoai(Sach >> TheLoai): pass
-    class giaTien(Sach >> int, FunctionalProperty): pass
-    class soLuong(Sach >> int, FunctionalProperty): pass
-    # -------- Các thuộc tính của Thể loại -------- #
-    class ten(TheLoai >> str, FunctionalProperty): pass
-    class dsSach(TheLoai >> Sach): pass
-    # -------- Các thuộc tính của Phiếu mượn -------- #
-    class docGia(PhieuMuon >> DocGia, FunctionalProperty): pass
-    class ngayMuon(PhieuMuon >> datetime.date, FunctionalProperty): pass
-    class ngayTra(PhieuMuon >> datetime.date, FunctionalProperty): pass
-    class sachMuon(PhieuMuon >> Sach): pass
     # -------- Các thuộc tính của Phòng -------- #
     class ten(Phong >> str, FunctionalProperty): pass
-    class suDungBoi(Phong >> ToChuc): 
-        inverse_property = phong
+    class suDungBoi(Phong >> ToChuc): inverse_property = phong
     # -------- Các thuộc tính của Hoạt động -------- #
     class ten(HoatDong >> str, FunctionalProperty): pass
     class ngayBatDau(HoatDong >> datetime.date, FunctionalProperty): pass
@@ -126,3 +94,73 @@ with onto:
     class hoatDong(DiemDanh >> HoatDong, FunctionalProperty): pass
     class ngayGio(DiemDanh >> datetime.datetime, FunctionalProperty): pass
     class trangThai(DiemDanh >> str, FunctionalProperty): pass
+    # -------- Các thuộc tính của Sử dụng cho Ruler - Không nhập dữ liệu mà dựa vào tập luật để sinh ra -------- #
+    class anhChiEm(HocSinh >> HocSinh): pass
+    class anh(HocSinh >> Anh): is_a = [anhChiEm] 
+    class chi(HocSinh >> Chi): is_a = [anhChiEm] 
+    class em(HocSinh >> Em): is_a = [anhChiEm] 
+    class vo(PhuHuynh >> PhuHuynh, FunctionalProperty): pass
+    class chong(PhuHuynh >> PhuHuynh, FunctionalProperty): pass
+    class hocLuc(HocSinh >> str, FunctionalProperty): pass
+    class danhHieu(HocSinh >> str, FunctionalProperty): pass
+    class phongLamViec(NhanVien >> Phong): pass
+    # -------- Các tập luật -------- # # https://www.w3.org/Submission/SWRL/
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ cha(?hs, ?c) -> phuHuynh(?hs, ?c) ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ me(?hs, ?m) -> phuHuynh(?hs, ?m) ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ cha(?hs, ?ph1) ^ me(?hs, ?ph2) -> vo(?ph1, ?ph2) ^ chong(?ph2, ?ph1) ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nam") -> anh(?hs1, ?hs2) ^ em(?hs2,?hs1) ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nữ") -> chi(?hs1, ?hs2) ^ em(?hs2,?hs1) ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 8.0) -> hocLuc(?hs, "Giỏi") ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 6.5) ^ lessThan(?dtb, 8.0) -> hocLuc(?hs, "Khá") ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 5.0) ^ lessThan(?dtb, 6.5) -> hocLuc(?hs, "Trung bình") ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ lessThan(?dtb, 5.0) -> hocLuc(?hs, "Yếu") ''')
+    # rule = Imp()
+    # rule.set_as_rule(''' HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Giỏi") ^ equal(?hk, "Tốt")-> danhHieu(?hs, "Học sinh giỏi") ''')
+    # rule = Imp()
+    # rule.set_as_rule(''' HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Giỏi") ^ equal(?hk, "Khá")-> danhHieu(?hs, "Học sinh giỏi") ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ startsWith(?hl, "Gi") ^ endsWith(?hk, "t")-> danhHieu(?hs, "Học sinh giỏi") ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ startsWith(?hl, "Gi") ^ startsWith(?hk, "Kh")-> danhHieu(?hs, "Học sinh giỏi") ''')
+    # rule = Imp()
+    # rule.set_as_rule(''' HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Khá") ^ equal(?hk, "Tốt") -> danhHieu(?hs, "Học sinh tiên tiến") ''')
+    # rule = Imp()
+    # rule.set_as_rule(''' HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Khá") ^ equal(?hk, "Khá") -> danhHieu(?hs, "Học sinh tiên tiến") ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ startsWith(?hl, "Kh") ^ endsWith(?hk, "t") -> danhHieu(?hs, "Học sinh tiên tiến") ''')
+    rule = Imp()
+    rule.set_as_rule(''' HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ startsWith(?hl, "Kh") ^ startsWith(?hk, "Kh") -> danhHieu(?hs, "Học sinh tiên tiến") ''')
+
+    # rule = Imp()
+    # rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) -> anh(?hs1, ?hs2) ''')
+    # rule = Imp()
+    # rule.set_as_rule(''' HocSinh(?hs) ^ diemSo(?hs, ?ds) ^ heSo1(?ds, ?hs1) ^ heSo2(?ds, ?hs2) ^ heSo3(?ds, ?hs3) ^ listConcat(?list, ?hs1, ?hs2, ?hs2, ?hs3, ?hs3, ?hs3) ^ length(?list, ?len) ^ add(?tong, ?list) ^ divide(?dtb, ?tong, ?len) ^ round(?kq, ?dtb, 2) -> diemTB(?hs, ?kq)''')
+
+    ####### Các hàm hỗ trợ: #######
+#     _BUILTINS = { "equal", "notEqual", "lessThan", "lessThanOrEqual", "greaterThan", "greaterThanOrEqual",
+#               "add", "subtract", "multiply", "divide", "integerDivide", "mod", "pow", "unaryPlus", "unaryMinus",
+#               "abs", "ceiling", "floor", "round", "roundHalfToEven", "sin", "cos", "tan",
+#               "booleanNot", "stringEqualIgnoreCase", "stringConcat", "substring", "stringLength",
+#               "normalizeSpace", "upperCase", "lowerCase", "translate", "contains", "containsIgnoreCase",
+#               "startsWith", "endsWith", "substringBefore", "substringAfter", "matches", "replace", "tokenize",
+#               "yearMonthDuration", "dayTimeDuration", "dateTime", "date", "time", "addYearMonthDurations",
+#               "subtractYearMonthDurations", "multiplyYearMonthDuration", "divideYearMonthDurations",
+#               "addDayTimeDurations", "subtractDayTimeDurations", "multiplyDayTimeDurations",
+#               "divideDayTimeDuration", "subtractDates", "subtractTimes", "addYearMonthDurationToDateTime",
+#               "addDayTimeDurationToDateTime", "subtractYearMonthDurationFromDateTime",
+#               "subtractDayTimeDurationFromDateTime", "addYearMonthDurationToDate", "addDayTimeDurationToDate",
+#               "subtractYearMonthDurationFromDate", "subtractDayTimeDurationFromDate", "addDayTimeDurationToTime",
+#               "subtractDayTimeDurationFromTime", "subtractDateTimesYieldingYearMonthDuration",
+#               "subtractDateTimesYieldingDayTimeDuration", "resolveURI", "anyURI",
+#               "listConcat", "listIntersection", "listSubtraction", "member", "length", "first", "rest", "sublist",
+#               "empty",
+# }
