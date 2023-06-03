@@ -1,31 +1,80 @@
-<div class="row">
-    <div class="col-md-6">
-        <div class="mb-3">
-            <label for="inputTen" class="form-label">Họ tên:</label>
-            <input type="text" class="form-control" id="editInputHoTen" value="{{ hs.hoTen }}">
-        </div>
-        <div class="mb-3">
-            <label for="selectLop" class="form-label">Lớp:</label>
-            <select class="form-select" id="editSelectHocLop">
-                <option value="">Chọn lớp</option>
-                {% for lop in dsLop %}
-                <option value="{{ lop.id }}" {% if lop.ten==hs.hocLop.ten %}selected{% endif %}>{{ lop.ten }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="mb-3">
-            <label for="inputNgaySinh" class="form-label">Ngày sinh:</label>
-            <input type="date" class="form-control" id="editInputNgaySinh" value="{{ hs.ngaySinh }}">
-        </div>
-        <div class="mb-3">
-            <label for="selectGioiTinh" class="form-label">Giới tính:</label>
-            <select class="form-select" id="editSelectGioiTinh">
-                <option value="Nam" {% if hs.gioiTinh=="Nam" %}selected{% endif %}>Nam</option>
-                <option value="Nữ" {% if hs.gioiTinh=="Nữ" %}selected{% endif %}>Nữ</option>
-                <option value="Khác" {% if hs.gioiTinh=="Khác" %}selected{% endif %}>Khác</option>
-            </select>
+<div class="d-flex flex-wrap justify-content-between">
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Thông tin cơ bản</h5>
+            <div class="mb-3">
+                <label for="inputTen" class="form-label">Họ tên:</label>
+                <input type="text" class="form-control" id="editInputHoTen" value="{{ hs.hoTen }}">
+            </div>
+            <div class="mb-3">
+                <label for="inputNgaySinh" class="form-label">Ngày sinh:</label>
+                <input type="date" class="form-control" id="editInputNgaySinh" value="{{ hs.ngaySinh }}">
+            </div>
+            <div class="mb-3">
+                <label for="selectGioiTinh" class="form-label">Giới tính:</label>
+                <select class="form-select" id="editSelectGioiTinh">
+                    <option value="Nam" {% if hs.gioiTinh=="Nam" %}selected{% endif %}>Nam</option>
+                    <option value="Nữ" {% if hs.gioiTinh=="Nữ" %}selected{% endif %}>Nữ</option>
+                </select>
+            </div>
         </div>
     </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Thông tin quan hệ</h5>
+            <div class="mb-3">
+                <label for="selectLop" class="form-label">Học lớp:</label>
+                <select class="form-select" id="editSelectHocLop">
+                    <option value="">Chọn lớp</option>
+                    {% for lop in dsLop %}
+                    <option value="{{ lop.id }}" {% if lop.ten==hs.hocLop.ten %}selected{% endif %}>{{ lop.ten }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="inputMe" class="form-label">Thông tin của mẹ:</label>
+                <input type="text" class="form-control" id="editInputMe" value="{{ hs.me }}">
+            </div>
+            <div class="mb-3">
+                <label for="inputCha" class="form-label">Thông tin của cha:</label>
+                <input type="text" class="form-control" id="editInputCha" value="{{ hs.cha }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Học tập và rèn luyện</h5>
+            <div class="mb-3">
+                <label for="inputHocLuc" class="form-label">Học lực:</label>
+                <input disabled type="text" class="form-control" id="editInputHocLuc" value="{{ hs.hocLuc }}">
+            </div>
+            <div class="mb-3">
+                <label for="selectHanhKiem" class="form-label">Hạnh kiểm:</label>
+                <select class="form-select" id="editSelectHanhKiem">
+                    <option value="Tốt" {% if hs.hanhKiem=="Tốt" %}selected{% endif %}>Tốt</option>
+                    <option value="Khá" {% if hs.hanhKiem=="Khá" %}selected{% endif %}>Khá</option>
+                    <option value="Trung bình" {% if hs.hanhKiem=="Trung bình" %}selected{% endif %}>Trung bình</option>
+                    <option value="Yếu" {% if hs.hanhKiem=="Yếu" %}selected{% endif %}>Yếu</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Tổng kết</h5>
+            <div class="mb-3">
+                <label for="inputDiemTB" class="form-label">Điểm trung bình:</label>
+                <input disabled type="text" class="form-control" id="editInputDiemTB" value="{{ hs.diemTB }}">
+            </div>
+            <div class="mb-3">
+                <label for="inputDanhHieu" class="form-label">Danh hiệu:</label>
+                <input disabled type="text" class="form-control" id="editInputDanhHieu" value="{{ hs.danhHieu }}">
+            </div>
+        </div>
+    </div>
+
 </div>
