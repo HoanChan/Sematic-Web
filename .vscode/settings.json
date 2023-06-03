@@ -9,5 +9,10 @@
     "python.analysis.extraPaths": [
         "d:/SOFTS/Anacoda/envs/OpenCV"
     ],
-    "python.analysis.typeCheckingMode": "off"
+    "python.analysis.typeCheckingMode": "off",
+    "notebook.output.textLineLimit": 30,
+    "notebook.cellToolbarVisibility": "hover",
+    "notebook.diff.ignoreOutputs": true,
+    "notebook.lineNumbers": "on",
+    "notebook.output.scrolling": true
 }
