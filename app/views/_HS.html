@@ -17,7 +17,7 @@
     <div class="col-md-6">
         <div class="mb-3">
             <label for="inputNgaySinh" class="form-label">Ngày sinh:</label>
-            <input type="date" class="form-control" id="editInputNgaySinh" value="{% if hs.ngaySinh %}{{ hs.ngaySinh[6:10] }}-{{ hs.ngaySinh[3:5] }}-{{ hs.ngaySinh[0:2] }}{% endif %}">
+            <input type="date" class="form-control" id="editInputNgaySinh" value="{{ hs.ngaySinh }}">
         </div>
         <div class="mb-3">
             <label for="selectGioiTinh" class="form-label">Giới tính:</label>

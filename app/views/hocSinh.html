@@ -80,8 +80,8 @@
                 <tr>
                     <td>{{ hs.ten }}</td>
                     <td>{{ hs.lop }}</td>
-                    <td>{{ hs.ngay_sinh }}</td>
-                    <td>{{ hs.gioi_tinh }}</td>
+                    <td>{{ hs.ngaySinh }}</td>
+                    <td>{{ hs.gioiTinh }}</td>
                     <td>
                         <button class="btn btn-primary btn-sm" type="button" onclick="editHocSinh({{ hs.id }})">Sửa</button>
                         <button class="btn btn-danger btn-sm" type="button" onclick="deleteHocSinh({{ hs.id }})">Xoá</button>
@@ -96,6 +96,20 @@
 
 {% block script %}
 <script>
+    function formatDate(dateString) {
+        // Khởi tạo đối tượng Date từ chuỗi ngày tháng
+        const date = new Date(dateString);
+
+        // Lấy ngày, tháng, năm từ đối tượng Date
+        const day = date.getDate().toString().padStart(2, "0");
+        const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Tháng bắt đầu từ 0
+        const year = date.getFullYear();
+
+        // Định dạng lại chuỗi ngày tháng theo định dạng dd/mm/yyyy
+        const formattedDate = `${day}/${month}/${year}`;
+
+        return formattedDate;
+    }
     $(document).ready(function () {
         $('#btnSearch').click(function () {
             var hoTen = $('#inputSearch').val();
@@ -115,7 +129,7 @@
                     var row = '<tr>';
                     row += '<td>' + hs.hoTen + '</td>';
                     row += '<td>' + hs.hocLop + '</td>';
-                    row += '<td>' + hs.ngaySinh + '</td>';
+                    row += '<td>' + formatDate(hs.ngaySinh) + '</td>';
                     row += '<td>' + hs.gioiTinh + '</td>';
                     row += '<td>';
                     row += '<button class="btn btn-primary btn-sm" type="button" onclick="editHocSinh(\'' + hs.id + '\')">Sửa</button>';

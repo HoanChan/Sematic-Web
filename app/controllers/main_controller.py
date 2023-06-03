@@ -59,7 +59,7 @@ class MainController:
         if hs:
             hs.hoTen = hoTen
             hs.hocLop = onto.search_one(iri = f'*#{hocLop}', type = onto.LopHoc)            
-            hs.ngaySinh = toDate(ngaySinh)
+            hs.ngaySinh = ngaySinh
             hs.gioiTinh = gioiTinh
             return True
         return False
