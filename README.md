@@ -80,3 +80,4 @@ Với cấu trúc này, dự án được tổ chức theo mô hình MVC (Model-
 ## Cài đặt
 - Owlready2: conda install -c conda-forge owlready2
 - jdk: conda install -c cyclus java-jdk
+- flask: conda install -c anaconda flask
