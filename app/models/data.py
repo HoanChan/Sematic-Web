@@ -32,8 +32,8 @@ def createRandomInfo():
     lot = nam_lot if gioiTinh == "Nam" else nu_lot
     return f"{ho} {lot} {ten}", gioiTinh
 
-def randScore():
-    score = round(random.gauss(7, 2.5), 0)
+def randScore(diemTB):
+    score = round(random.gauss(diemTB, 2.5), 0)
     if score < 0: score = 0
     if score > 10: score = 10
     if score != 10:
@@ -108,16 +108,17 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
             elif j == 1: gv.chucVu = [toPho, giaoVien]   
             else: gv.chucVu = [giaoVien]         
             dsGV.append(gv)
-        # Tạo điểm số cho từng HS
-        for hs in dsHS:
-            hs1 = [randScore(),randScore(),randScore()]
-            hs2 = [randScore()]
-            hs3 = [randScore()]
-            diemTB = round((sum(hs1) + sum(hs2)*2 + sum(hs3)*3) / (len(hs1) + len(hs2)*2 + len(hs3)*3),2)
-            diem = DiemSo(hocSinh = hs, monHoc = mon_hoc, heSo1 = hs1, heSo2 = hs2, heSo3 = hs3, diemTB = diemTB)
 
     # Tính điểm trung bình tất cả các môn của từng HS
     for hs in dsHS:
+        # Tạo điểm số cho từng HS
+        tb = random.randint(3, 10)
+        for mon_hoc in dsMonHoc:
+            hs1 = [randScore(tb),randScore(tb),randScore(tb)]
+            hs2 = [randScore(tb)]
+            hs3 = [randScore(tb)]
+            diemTB = round((sum(hs1) + sum(hs2)*2 + sum(hs3)*3) / (len(hs1) + len(hs2)*2 + len(hs3)*3),2)
+            diem = DiemSo(hocSinh = hs, monHoc = mon_hoc, heSo1 = hs1, heSo2 = hs2, heSo3 = hs3, diemTB = diemTB)
         hs.diemTB = round(sum(d.diemTB for d in hs.diemSo) / len(hs.diemSo),2)
         # Tính hạnh kiểm
         if hs.diemTB >= 6.5: hs.hanhKiem = random.choice(['Tốt','Khá'])
