@@ -143,8 +143,8 @@
         $('#btnAdd').click(function(){
             $.get('/api/newHS', {}, function (data) {
                 var modal = `
-                <div class="modal fade" id="modalNewHocSinh" tabindex="-1" aria-labelledby="modalNewHocSinhLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                <div class="modal fade" id="modalNewHocSinh" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalNewHocSinhLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="modalNewHocSinhLabel">Thêm mới học sinh</h5>
@@ -187,8 +187,8 @@
             id: id
         }, function (data) {
             var modal = `
-            <div class="modal fade" id="modalEditHocSinh" tabindex="-1" aria-labelledby="modalEditHocSinhLabel" aria-hidden="true">
-                <div class="modal-dialog">
+            <div class="modal fade" id="modalEditHocSinh" aria-labelledby="modalEditHocSinhLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modalEditHocSinhLabel">Chỉnh sửa thông tin học sinh</h5>
