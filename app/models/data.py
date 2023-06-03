@@ -24,10 +24,12 @@ def createRandomJob():
 def createRandomInfo():
     ho = random.choice(["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Võ", "Đặng", "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", "Lý", "Lương", "Mai", "Trương", "Tạ", "Đào", 
                             "Đoàn", "Đinh", "Lâm", "Phùng", "Đoàn", "Bành", "Quách", "Thái", "Tô", "Tôn", "Tăng"])
-    lot = random.choice(['Văn', 'Thị', 'Hồng', 'Anh', 'Quý', 'Bảo', "Thanh", "Thu", "Hữu", "Mai", "Đình", "Hoài", "Ngọc", "Minh", "Kim"])
+    nam_lot =  random.choice(['Văn', 'Bảo', 'Anh', 'Quý', 'Hữu', 'Đình', 'Minh', 'Quốc'])
+    nu_lot =  random.choice(['Thị', 'Hồng', 'Thanh', 'Thu', 'Mai', 'Hoài', 'Ngọc', 'Kim'])
     ten = random.choice(["An", "Bình", "Cường", "Dũng", "Hải", "Hiền", "Hoàng", "Hùng", "Khánh", "Linh", "Long", "Minh", "Nam", "Ngọc", "Nhật", "Phương", "Quân", "Quang", "Quỳnh", 
                             "Sơn", "Thảo", "Thiên", "Thiện", "Thúy", "Thuận", "Tùng", "Tú", "Tường", "Việt", "Vân", "Vinh", "Xuân"])
     gioiTinh = random.choice(["Nam", "Nữ"])
+    lot = nam_lot if gioiTinh == "Nam" else nu_lot
     return f"{ho} {lot} {ten}", gioiTinh
 
 def randScore():
@@ -122,7 +124,6 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
         elif hs.diemTB >= 5: hs.hanhKiem = random.choice(['Khá','Trung bình'])
         else: hs.hanhKiem = random.choice(['Trung bình','Yếu'])
 
-    # Chọn ngẫu nhiên các giáo viên làm tổ trưởng, tổ phó
     # Cho một số GV dạy 2 môn
     gvKhongChucVu = [gv for gv in dsGV if len(gv.chucVu) == 1]
     for gv in random.sample(gvKhongChucVu, soGVDay2Mon):
@@ -184,10 +185,8 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
             phong = Phong(ten = f'Phòng {cv.ten} {i+1}' if soNV > 1 else f'Phòng {cv.ten}')
             tc.phong.append(phong)
             dsPhong.append(phong)
+            nv.phongLamViec = [phong]
     
-    toTruong = [cv for cv in dsChucVu if cv.ten == 'Tổ trưởng'][0]
-    toPho = [cv for cv in dsChucVu if cv.ten == 'Tổ phó'][0]
-
     # Cho kế toán làm tổ trưởng và văn thư làm tổ phó
     nv = [nv for nv in dsNV if nv.chucVu[0].ten == 'Kế toán'][0]
     nv.chucVu.append(toTruong)

@@ -47,7 +47,6 @@ with onto:
     class con(PhuHuynh >> HocSinh): pass
     # -------- Các thuộc tính của Lớp học -------- #
     class giaoVienChuNhiem(LopHoc >> GiaoVien, FunctionalProperty): pass
-    class phong(LopHoc >> Phong): pass
     class dsHocSinh(LopHoc >> HocSinh): pass
     # -------- Các thuộc tính của Học sinh -------- #
     class hocLop(HocSinh >> LopHoc, FunctionalProperty): inverse_property = dsHocSinh
@@ -99,16 +98,14 @@ with onto:
     class anh(HocSinh >> Anh): is_a = [anhChiEm] 
     class chi(HocSinh >> Chi): is_a = [anhChiEm] 
     class em(HocSinh >> Em): is_a = [anhChiEm] 
-    class vo(PhuHuynh >> PhuHuynh, FunctionalProperty): pass
-    class chong(PhuHuynh >> PhuHuynh, FunctionalProperty): pass
+    class vo(Cha >> Me, FunctionalProperty): pass
+    class chong(Me >> Cha, FunctionalProperty): pass
     class hocLuc(HocSinh >> str, FunctionalProperty): pass
     class danhHieu(HocSinh >> str, FunctionalProperty): pass
     class phongLamViec(NhanVien >> Phong): pass
     # -------- Các tập luật -------- # # https://www.w3.org/Submission/SWRL/
     rule = Imp()
-    rule.set_as_rule(''' HocSinh(?hs) ^ cha(?hs, ?c) -> phuHuynh(?hs, ?c) ''')
-    rule = Imp()
-    rule.set_as_rule(''' HocSinh(?hs) ^ me(?hs, ?m) -> phuHuynh(?hs, ?m) ''')
+    rule.set_as_rule(''' HocSinh(?hs) ^ cha(?hs, ?c)  ^ me(?hs, ?m) -> phuHuynh(?hs, ?c) ^ phuHuynh(?hs, ?m)  ''')
     rule = Imp()
     rule.set_as_rule(''' HocSinh(?hs) ^ cha(?hs, ?ph1) ^ me(?hs, ?ph2) -> vo(?ph1, ?ph2) ^ chong(?ph2, ?ph1) ''')
     rule = Imp()
@@ -145,6 +142,12 @@ with onto:
     # rule = Imp()
     # rule.set_as_rule(''' HocSinh(?hs) ^ diemSo(?hs, ?ds) ^ heSo1(?ds, ?hs1) ^ heSo2(?ds, ?hs2) ^ heSo3(?ds, ?hs3) ^ listConcat(?list, ?hs1, ?hs2, ?hs2, ?hs3, ?hs3, ?hs3) ^ length(?list, ?len) ^ add(?tong, ?list) ^ divide(?dtb, ?tong, ?len) ^ round(?kq, ?dtb, 2) -> diemTB(?hs, ?kq)''')
 
+    # Giáo viên làm tổ trưởng của tổ nào thì có phòng làm việc là phòng của tổ đó
+    rule = Imp()
+    rule.set_as_rule(''' GiaoVien(?gv) ^ chucVu(?gv, ?dscv) ^ ChucVu(?cv) ^ endsWith(?cv,"cvToTruong") ^ member(?cv,?dscv) ^ toChuc(?gv,?tc) ^ phong(?tc,?p) -> phongLamViec(?gv, ?p) ''')
+    # Giáo viên chủ nhiệm lớp nào thì có phòng làm việc là lớp đó
+    rule = Imp()
+    rule.set_as_rule(''' LopHoc(?lh) ^ giaoVienChuNhiem(?lh,?gv) ^ phong(?lh,?p) -> phongLamViec(?gv, ?p) ''')
     ####### Các hàm hỗ trợ: #######
 #     _BUILTINS = { "equal", "notEqual", "lessThan", "lessThanOrEqual", "greaterThan", "greaterThanOrEqual",
 #               "add", "subtract", "multiply", "divide", "integerDivide", "mod", "pow", "unaryPlus", "unaryMinus",
