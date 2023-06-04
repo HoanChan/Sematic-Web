@@ -84,7 +84,6 @@ def initRouteHS(app):
     def api_getHS():
         id = request.args.get('id')
         hs = get_HS(id)
-        print(hs)
         dsLop = get_dsLop()
         return render_template("_HS.html", dsLop=dsLop, hs=hs)
 

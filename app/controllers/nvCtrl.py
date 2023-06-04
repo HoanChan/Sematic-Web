@@ -15,13 +15,12 @@ def search_NV(hoTen, toChuc, ngaySinh, gioiTinh):
     if ngaySinh: query_str += f'?nv s:ngaySinh "{toDate(ngaySinh)}".'
     if gioiTinh: query_str += f'?nv s:gioiTinh "{gioiTinh}".'
     query_str += '}'
-    print(query_str)
     result = default_world.sparql(query_str)
     dsNV = []
     if result:
         dsNV = list(map(lambda nv: {'id': nv[0].name,
                                     'hoTen': nv[0].hoTen, 
-                                    'toChuc': nv[0].toChuc.ten, 
+                                    'toChuc': ', '.join([x.ten for x in nv[0].toChuc]), 
                                     'ngaySinh': nv[0].ngaySinh, 
                                     'gioiTinh': nv[0].gioiTinh}, result))
     return dsNV
@@ -54,7 +53,7 @@ def save_NV(id, hoTen, toChuc, ngaySinh, gioiTinh):
 def initRouteNV(app):        
     @app.route("/nhanVien/edit")
     def nhanVienEdit():
-        dsToChuc = get_dsToChuc()
+        dsToChuc = get_dsToChuc(includeClass=False)
         dsNV = []
         return render_template("nhanVien.html", dsToChuc=dsToChuc, dsNV=dsNV, edit=True)
 
@@ -84,14 +83,13 @@ def initRouteNV(app):
     def api_getNV():
         id = request.args.get('id')
         nv = get_NV(id)
-        print(nv)
-        dsToChuc = get_dsToChuc()
+        dsToChuc = get_dsToChuc(includeClass=False)
         return render_template("_NV.html", dsToChuc=dsToChuc, nv=nv)
 
     @app.route('/api/newNV', methods=['GET'])
     def api_newNV():
         id, nv = new_NV()
-        dsToChuc = get_dsToChuc()
+        dsToChuc = get_dsToChuc(includeClass=False)
         return {'id':id, 'html': render_template("_NV.html", dsToChuc=dsToChuc, nv=nv)}
 
     @app.route('/api/saveNV', methods=['POST'])
