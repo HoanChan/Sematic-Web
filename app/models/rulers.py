@@ -2,31 +2,36 @@ from .model import *
 from owlready2 import *
 
 def apply_rules():
-    # HocSinh(?hs) ^ cha(?hs, ?c)  ^ me(?hs, ?m) -> phuHuynh(?hs, ?c) ^ phuHuynh(?hs, ?m) 
-
-    for hs in onto.HocSinh.instances():
-        hs.phuHuynh.append(hs.cha)
-        hs.phuHuynh.append(hs.me)
-
-    # HocSinh(?hs) ^ cha(?hs, ?ph1) ^ me(?hs, ?ph2) -> vo(?ph1, ?ph2) ^ chong(?ph2, ?ph1)
-
-    for hs in onto.HocSinh.instances():
-        hs.cha.vo = hs.me
-        hs.me.chong = hs.cha
 
     # HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nam") -> anh(?hs1, ?hs2) ^ em(?hs2,?hs1)
     # HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nữ") -> chi(?hs1, ?hs2) ^ em(?hs2,?hs1)
     for hs1 in onto.HocSinh.instances():
         for hs2 in onto.HocSinh.instances():
             if hs1 != hs2 and hs1.me == hs2.me and hs1.ngaySinh > hs2.ngaySinh:  # Kiểm tra hai học sinh khác nhau + Kiểm tra mẹ của hai học sinh là cùng một người
-                if hs1.gioiTinh == "Nam": hs1.anh.append(hs2)
-                else: hs1.chi.append(hs2)        
-                hs2.em.append(hs1)
-    # HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 8.0) -> hocLuc(?hs, "Giỏi")
-    # HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 6.5) ^ lessThan(?dtb, 8.0) -> hocLuc(?hs, "Khá")
-    # HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 5.0) ^ lessThan(?dtb, 6.5) -> hocLuc(?hs, "Trung bình")
-    # HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ lessThan(?dtb, 5.0) -> hocLuc(?hs, "Yếu")
-    for hs in onto.HocSinh.instances():
+                if hs1.gioiTinh == "Nam" and hs2 not in hs1.anh: hs1.anh.append(hs2)
+                elif hs1.gioiTinh == "Nữ" and hs2 not in hs1.chi: hs1.chi.append(hs2)        
+                if hs1 not in hs2.em: hs2.em.append(hs1)
+
+    # Cập nhật thông tin HS
+    for hs in onto.HocSinh.instances():        
+        # HocSinh(?hs) ^ cha(?hs, ?c)  ^ me(?hs, ?m) -> phuHuynh(?hs, ?c) ^ phuHuynh(?hs, ?m) 
+        # HocSinh(?hs) ^ cha(?hs, ?ph1) ^ me(?hs, ?ph2) -> vo(?ph1, ?ph2) ^ chong(?ph2, ?ph1)
+
+        hs.phuHuynh= [hs.cha, hs.me]
+        hs.cha.vo = hs.me
+        hs.me.chong = hs.cha
+
+        # Tính điểm số cho từng HS
+        for diem in hs.diemSo:
+            diemTB = round((sum(diem.heSo1) + sum(diem.heSo2)*2 + sum(diem.heSo3)*3) / (len(diem.heSo1) + len(diem.heSo2)*2 + len(diem.heSo3)*3),2)
+            diem.diemTB = diemTB
+        hs.diemTB = round(sum(d.diemTB for d in hs.diemSo) / len(hs.diemSo),2)
+
+        # HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 8.0) -> hocLuc(?hs, "Giỏi")
+        # HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 6.5) ^ lessThan(?dtb, 8.0) -> hocLuc(?hs, "Khá")
+        # HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 5.0) ^ lessThan(?dtb, 6.5) -> hocLuc(?hs, "Trung bình")
+        # HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ lessThan(?dtb, 5.0) -> hocLuc(?hs, "Yếu")
+    
         dtb = hs.diemTB    
         if dtb >= 8.0: 
             hs.hocLuc = "Giỏi"
@@ -36,11 +41,11 @@ def apply_rules():
             hs.hocLuc = "Trung bình"
         elif dtb < 5.0:
             hs.hocLuc = "Yếu"
-    # HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Giỏi") ^ equal(?hk, "Tốt")-> danhHieu(?hs, "Học sinh giỏi")
-    # HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Giỏi") ^ equal(?hk, "Khá")-> danhHieu(?hs, "Học sinh giỏi")
-    # HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Khá") ^ equal(?hk, "Tốt") -> danhHieu(?hs, "Học sinh tiên tiến")
-    # HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Khá") ^ equal(?hk, "Khá") -> danhHieu(?hs, "Học sinh tiên tiến")
-    for hs in onto.HocSinh.instances():
+        # HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Giỏi") ^ equal(?hk, "Tốt")-> danhHieu(?hs, "Học sinh giỏi")
+        # HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Giỏi") ^ equal(?hk, "Khá")-> danhHieu(?hs, "Học sinh giỏi")
+        # HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Khá") ^ equal(?hk, "Tốt") -> danhHieu(?hs, "Học sinh tiên tiến")
+        # HocSinh(?hs) ^ hocLuc(?hs, ?hl) ^ hanhKiem(?hs, ?hk) ^ equal(?hl, "Khá") ^ equal(?hk, "Khá") -> danhHieu(?hs, "Học sinh tiên tiến")
+    
         hl = hs.hocLuc
         hk = hs.hanhKiem
         
@@ -66,3 +71,5 @@ def apply_rules():
     #     phong_lam_viec = onto.PhongLamViec()
     #     phong_lam_viec.has_teacher.append(gv)
     #     phong_lam_viec.has_room.append(p)
+
+    
