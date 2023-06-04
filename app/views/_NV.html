@@ -43,36 +43,42 @@
             </div>
             <div class="mb-3">
                 <label for="inputChucVu" class="form-label">Chức vụ:</label>
-                <input type="text" class="form-control" id="editInputChucVu" value="{{ nv.chucVu }}">
+                <select class="form-select" id="editSelectChucVu" multiple>
+                    {% for chucVu in dsChucVu %}
+                    <option value="{{ chucVu }}" {% if chucVu in nv.chucVu %}selected{% endif %}>{{ chucVu }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="mb-3">
                 <label for="inputPhongLamViec" class="form-label">Phòng làm việc:</label>
-                <input type="text" class="form-control" id="editInputPhongLamViec" value="{{ nv.phongLamViec }}">
+                <input type="text" class="form-control" id="editInputPhongLamViec" disabled value="{{ nv.phongLamViec }}">
             </div>
         </div>
     </div>
-
+{% if isTeacher %}
     <div class="card mb-3">
         <div class="card-body">
             <h5 class="card-title">Thông tin giáo viên</h5>
             <div class="mb-3">
                 <label for="inputDayMon" class="form-label">Dạy môn:</label>
-                <input type="text" class="form-control" id="editInputDayMon" value="{{ nv.dayMon }}">
-            </div>
-            <div class="mb-3">
-                <label for="inputGiangDay" class="form-label">Giảng dạy:</label>
-                <input type="text" class="form-control" id="editInputGiangDay" value="{{ nv.giangDay }}">
-            </div>
-            <div class="mb-3">
-                <label for="selectLopChuNhiem" class="form-label">Lớp chủ nhiệm:</label>
-                <select class="form-select" id="editSelectLopChuNhiem">
-                    <option value="">Chọn lớp</option>
-                    {% for lop in dsLop %}
-                    <option value="{{ lop.id }}" {% if lop.ten==nv.lopChNhiệm.ten %}selected{% endif %}>{{ lop.ten }}</option>
+                <select class="form-select" id="editInputDayMon" multiple>
+                    {% for monHoc in dsMonHoc %}
+                    <option value="{{ monHoc }}" {% if monHoc in nv.dayMon %}selected{% endif %}>{{ monHoc }}</option>
                     {% endfor %}
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="inputGiangDay" class="form-label">Giảng dạy:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" disabled aria-describedby="btnEditGiangDay" id="editInputGiangDay" value="{{ nv.giangDay }}">
+                    <button class="btn btn-outline-secondary" type="button" id="btnEditGiangDay">Sửa</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="selectLopChuNhiem" class="form-label">Lớp chủ nhiệm:</label>
+                <input type="text" class="form-control" id="editInputLopChuNhiem" disabled value="{{ nv.lopChuNhiem.ten }}">
+            </div>
         </div>
     </div>
-
+{% endif %}
 </div>

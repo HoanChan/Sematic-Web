@@ -35,11 +35,17 @@
             </div>
             <div class="mb-3">
                 <label for="inputMe" class="form-label">Thông tin của mẹ:</label>
-                <input type="text" class="form-control" id="editInputMe" value="{{ hs.me }}">
+                <div class="input-group">
+                    <input type="text" class="form-control" disabled aria-describedby="btnEditMe" id="editInputMe" value="{{ hs.me.hoTen }}">
+                    <button class="btn btn-outline-secondary" type="button" id="btnEditMe">Sửa</button>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="inputCha" class="form-label">Thông tin của cha:</label>
-                <input type="text" class="form-control" id="editInputCha" value="{{ hs.cha }}">
+                <div class="input-group">
+                    <input type="text" class="form-control" disabled aria-describedby="btnEditCha" id="editInputCha" value="{{ hs.cha.hoTen }}">
+                    <button class="btn btn-outline-secondary" type="button" id="btnEditCha">Sửa</button>
+                </div>
             </div>
         </div>
     </div>
@@ -68,7 +74,11 @@
             <h5 class="card-title">Tổng kết</h5>
             <div class="mb-3">
                 <label for="inputDiemTB" class="form-label">Điểm trung bình:</label>
-                <input disabled type="text" class="form-control" id="editInputDiemTB" value="{{ hs.diemTB }}">
+                <div class="input-group">
+                    <input type="text" class="form-control" disabled aria-describedby="btnEditDiemTB" id="editInputDiemTB" value="{{ hs.diemTB }}">
+                    <button class="btn btn-outline-secondary" type="button" id="btnEditDiemTB">Sửa</button>
+                </div>
+                
             </div>
             <div class="mb-3">
                 <label for="inputDanhHieu" class="form-label">Danh hiệu:</label>
