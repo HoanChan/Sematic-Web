@@ -72,4 +72,18 @@ def apply_rules():
     #     phong_lam_viec.has_teacher.append(gv)
     #     phong_lam_viec.has_room.append(p)
 
+def startSyncPellet():
+    with onto:
+        sync_reasoner_pellet(infer_property_values = True, infer_data_property_values = True)
+
+def startSyncHermiT():
+    with onto:
+        sync_reasoner(infer_property_values = True, infer_data_property_values = True)
     
+def stopSyncPellet():
+    with onto:
+        sync_reasoner_pellet.stop()
+
+def stopSyncHermiT():
+    with onto:
+        sync_reasoner.stop()
