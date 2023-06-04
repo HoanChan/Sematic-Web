@@ -1,0 +1,78 @@
+<div class="d-flex flex-wrap justify-content-between">
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Thông tin cơ bản</h5>
+            <div class="mb-3">
+                <label for="inputTen" class="form-label">Họ tên:</label>
+                <input type="text" class="form-control" id="editInputHoTen" value="{{ nv.hoTen }}">
+            </div>
+            <div class="mb-3">
+                <label for="inputNgaySinh" class="form-label">Ngày sinh:</label>
+                <input type="date" class="form-control" id="editInputNgaySinh" value="{{ nv.ngaySinh }}">
+            </div>
+            <div class="mb-3">
+                <label for="selectGioiTinh" class="form-label">Giới tính:</label>
+                <select class="form-select" id="editSelectGioiTinh">
+                    <option value="Nam" {% if nv.gioiTinh=="Nam" %}selected{% endif %}>Nam</option>
+                    <option value="Nữ" {% if nv.gioiTinh=="Nữ" %}selected{% endif %}>Nữ</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="inputTrinhDo" class="form-label">Trình độ:</label>
+                <input type="text" class="form-control" id="editInputTrinhDo" value="{{ nv.trinhDo }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Thông tin nhân viên</h5>
+            <div class="mb-3">
+                <label for="selectToChuc" class="form-label">Tổ chức:</label>
+                <select class="form-select" id="editSelectToChuc">
+                    <option value="">Chọn tổ chức</option>
+                    {% for tc in dsToChuc %}
+                    <option value="{{ tc.id }}" {% if tc.ten==nv.toChuc.ten %}selected{% endif %}>{{ tc.ten }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="inputHeSoLuong" class="form-label">Hệ số lương:</label>
+                <input type="number" class="form-control" id="editInputHeSoLuong" value="{{ nv.heSoLuong }}">
+            </div>
+            <div class="mb-3">
+                <label for="inputChucVu" class="form-label">Chức vụ:</label>
+                <input type="text" class="form-control" id="editInputChucVu" value="{{ nv.chucVu }}">
+            </div>
+            <div class="mb-3">
+                <label for="inputPhongLamViec" class="form-label">Phòng làm việc:</label>
+                <input type="text" class="form-control" id="editInputPhongLamViec" value="{{ nv.phongLamViec }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Thông tin giáo viên</h5>
+            <div class="mb-3">
+                <label for="inputDayMon" class="form-label">Dạy môn:</label>
+                <input type="text" class="form-control" id="editInputDayMon" value="{{ nv.dayMon }}">
+            </div>
+            <div class="mb-3">
+                <label for="inputGiangDay" class="form-label">Giảng dạy:</label>
+                <input type="text" class="form-control" id="editInputGiangDay" value="{{ nv.giangDay }}">
+            </div>
+            <div class="mb-3">
+                <label for="selectLopChuNhiem" class="form-label">Lớp chủ nhiệm:</label>
+                <select class="form-select" id="editSelectLopChuNhiem">
+                    <option value="">Chọn lớp</option>
+                    {% for lop in dsLop %}
+                    <option value="{{ lop.id }}" {% if lop.ten==nv.lopChNhiệm.ten %}selected{% endif %}>{{ lop.ten }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+</div>

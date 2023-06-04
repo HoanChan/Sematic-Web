@@ -1,0 +1,235 @@
+{% extends "_layout.html" %}
+{% block title %}Danh sách nhân viên{% endblock %}
+{% block head %}
+<style>
+    @media(min-width: 768px) {
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: inline-block;
+            width: 120px;
+            margin-right: 10px;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<!-- Phần bảng điều khiển -->
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="mb-4">Danh sách nhân viên</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="inputSearch">Họ tên:</label>
+                    <input type="text" class="form-control" id="inputSearch" placeholder="Nhập tên nhân viên...">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="selectToChuc">Tổ chức:</label>
+                    <select class="form-control" id="selectToChuc">
+                        <option value="">Tất cả</option>
+                        {% for tc in dsToChuc %}
+                        <option value="{{ tc.id }}">{{ tc.ten }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="inputNgaySinh">Ngày sinh:</label>
+                    <input type="date" class="form-control" id="inputNgaySinh" placeholder="Chọn ngày sinh...">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="selectGioiTinh">Giới tính:</label>
+                    <select class="form-control" id="selectGioiTinh">
+                        <option value="">Tất cả</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group text-center">
+            <button class="btn btn-primary" type="button" id="btnSearch"><i class="fa fa-search"></i>Tìm kiếm</button>
+            <button class="btn btn-success" type="button" id="btnAdd"><i class="fa fa-plus"></i>Thêm mới</button>
+        </div>
+    </div>
+</div>
+
+<!-- Phần hiển thị dữ liệu -->
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tên</th>
+                    <th>Tổ chức</th>
+                    <th>Ngày sinh</th>
+                    <th>Giới tính</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody id="tableData">
+                {% for nv in dsNV %}
+                <tr>
+                    <td>{{ nv.ten }}</td>
+                    <td>{{ nv.lop }}</td>
+                    <td>{{ nv.ngaySinh }}</td>
+                    <td>{{ nv.gioiTinh }}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" type="button" onclick="editNhanVien({{ nv.id }})">Sửa</button>
+                        <button class="btn btn-danger btn-sm" type="button" onclick="deleteNhanVien({{ nv.id }})">Xoá</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function formatDate(dateString) {
+        // Khởi tạo đối tượng Date từ chuỗi ngày tháng
+        const date = new Date(dateString);
+
+        // Lấy ngày, tháng, năm từ đối tượng Date
+        const day = date.getDate().toString().padStart(2, "0");
+        const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Tháng bắt đầu từ 0
+        const year = date.getFullYear();
+
+        // Định dạng lại chuỗi ngày tháng theo định dạng dd/mm/yyyy
+        const formattedDate = `${day}/${month}/${year}`;
+
+        return formattedDate;
+    }
+    $(document).ready(function () {
+        $('#btnSearch').click(function () {
+            var hoTen = $('#inputSearch').val();
+            var toChuc = $('#selectToChuc').val();
+            var ngaySinh = $('#inputNgaySinh').val();
+            var gioiTinh = $('#selectGioiTinh').val();
+
+            $.get('/api/dsNV', {
+                hoTen: hoTen,
+                toChuc: toChuc,
+                ngaySinh: ngaySinh,
+                gioiTinh: gioiTinh
+            }, function (data) {
+                $('#tableData').empty();
+
+                $.each(data, function (index, nv) {
+                    var row = '<tr>';
+                    row += '<td>' + nv.hoTen + '</td>';
+                    row += '<td>' + nv.toChuc + '</td>';
+                    row += '<td>' + formatDate(nv.ngaySinh) + '</td>';
+                    row += '<td>' + nv.gioiTinh + '</td>';
+                    row += '<td>';
+                    row += '<button class="btn btn-primary btn-sm" type="button" onclick="editNhanVien(\'' + nv.id + '\')">Sửa</button>';
+                    row += '<button class="btn btn-danger btn-sm" type="button" onclick="deleteNhanVien(\'' + nv.id + '\')">Xoá</button>';
+                    row += '</td>';
+                    row += '</tr>';
+                    $('#tableData').append(row);
+                });
+            });
+        });
+        $('#btnAdd').click(function () {
+            $.get('/api/newnv', {}, function (data) {
+                var modal = `
+                <div class="modal fade" id="modalNewNhanVien" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalNewNhanVienLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalNewNhanVienLabel">Thêm mới nhân viên</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${data.html}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" onclick="$('#modalNewNhanVien').modal('hide');saveNhanVien('${data.id}')">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `
+                $('body').append(modal);
+                $('#modalNewNhanVien').modal('show');
+                $('#modalNewNhanVien').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                    $('#modalNewNhanVien').remove();
+                })
+            });
+        })
+    });
+    function deleteNhanVien(id) {
+        if (confirm("Bạn có chắc chắn muốn xoá nhân viên này?")) {
+            $.post('/api/deletenv', {
+                id: id
+            }, function (data) {
+                if (data) {
+                    //alert("Xoá nhân viên thành công!");
+                    $('#btnSearch').click();
+                } else {
+                    alert("Xoá nhân viên thất bại!");
+                }
+            });
+        }
+    }
+    function editNhanVien(id) {
+        $.get('/api/getNV', {
+            id: id
+        }, function (data) {
+            var modal = `
+            <div class="modal fade" id="modalEditNhanVien" aria-labelledby="modalEditNhanVienLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditNhanVienLabel">Chỉnh sửa thông tin nhân viên</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ${data}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="$('#modalEditNhanVien').modal('hide');saveNhanVien('${id}')">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+            $('body').append(modal);
+            $('#modalEditNhanVien').modal('show');
+            $('#modalEditNhanVien').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                $('#modalEditNhanVien').remove();
+            })
+        });
+    }
+    function saveNhanVien(id) {
+        var hoTen = $('#editInputHoTen').val();
+        var toChuc = $('#editSelecToChuc').val();
+        var ngaySinh = $('#editInputNgaySinh').val();
+        var gioiTinh = $('#editSelectGioiTinh').val();
+        $.post('/api/savenv', {
+            id: id,
+            hoTen: hoTen,
+            toChuc: toChuc,
+            ngaySinh: ngaySinh,
+            gioiTinh: gioiTinh
+        }, function (data) {
+            if (data) {
+                //alert("Sửa nhân viên thành công!");
+                $('#btnSearch').click();
+            } else {
+                alert("Sửa nhân viên thất bại!");
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -13,5 +13,8 @@ def index():
 from controllers.hsCtrl import initRouteHS
 initRouteHS(app)
 
+from controllers.nvCtrl import initRouteNV
+initRouteNV(app)
+
 if __name__ == "__main__":
     app.run(debug=True)

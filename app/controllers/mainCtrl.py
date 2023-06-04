@@ -11,6 +11,13 @@ def get_GiaoVien():
 
 def get_MonHoc():
     return onto.MonHoc.instances()
+
 def get_dsLop():
-    return list(map(lambda lop:{'id':lop.iri.split('#')[1], 
-                                'ten':lop.ten},onto.LopHoc.instances()))
+    return [{'id':lop.name, 'ten':lop.ten} for lop in onto.LopHoc.instances()]
+
+def get_dsToChuc(includeClass = False):
+    if includeClass:
+        return [{'id': tc.name, 'ten': tc.ten} for tc in onto.ToChuc.instances()]
+    else:
+        lsLop = onto.LopHoc.instances()
+        return [{'id': tc.name, 'ten': tc.ten} for tc in onto.ToChuc.instances() if tc not in lsLop]
