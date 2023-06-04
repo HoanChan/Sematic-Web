@@ -19,7 +19,7 @@ def search_HS(hoTen, hocLop, ngaySinh, gioiTinh):
     result = default_world.sparql(query_str)
     dsHS = []
     if result:
-        dsHS = list(map(lambda hs: {'id': hs[0].iri.split('#')[1],
+        dsHS = list(map(lambda hs: {'id': hs[0].name,
                                     'hoTen': hs[0].hoTen, 
                                     'hocLop': hs[0].hocLop.ten, 
                                     'ngaySinh': hs[0].ngaySinh, 
