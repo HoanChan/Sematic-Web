@@ -19,7 +19,7 @@
 <!-- Phần bảng điều khiển -->
 <div class="row">
     <div class="col-md-12">
-        <h2 class="mb-4">Danh sách học sinh</h2>
+        <h1 class="mb-4 text-center my-4">Danh sách học sinh</h1>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -57,7 +57,9 @@
         </div>
         <div class="form-group text-center">
             <button class="btn btn-primary" type="button" id="btnSearch"><i class="fa fa-search"></i>Tìm kiếm</button>
+            {% if edit %}
             <button class="btn btn-success" type="button" id="btnAdd"><i class="fa fa-plus"></i>Thêm mới</button>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -72,22 +74,13 @@
                     <th>Lớp</th>
                     <th>Ngày sinh</th>
                     <th>Giới tính</th>
+                    {% if edit %}
                     <th>Thao tác</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody id="tableData">
-                {% for hs in dsHS %}
-                <tr>
-                    <td>{{ hs.ten }}</td>
-                    <td>{{ hs.lop }}</td>
-                    <td>{{ hs.ngaySinh }}</td>
-                    <td>{{ hs.gioiTinh }}</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm" type="button" onclick="editHocSinh({{ hs.id }})">Sửa</button>
-                        <button class="btn btn-danger btn-sm" type="button" onclick="deleteHocSinh({{ hs.id }})">Xoá</button>
-                    </td>
-                </tr>
-                {% endfor %}
+                
             </tbody>
         </table>
     </div>
@@ -131,15 +124,18 @@
                     row += '<td>' + hs.hocLop + '</td>';
                     row += '<td>' + formatDate(hs.ngaySinh) + '</td>';
                     row += '<td>' + hs.gioiTinh + '</td>';
+                    {% if edit %}
                     row += '<td>';
-                    row += '<button class="btn btn-primary btn-sm" type="button" onclick="editHocSinh(\'' + hs.id + '\')">Sửa</button>';
-                    row += '<button class="btn btn-danger btn-sm" type="button" onclick="deleteHocSinh(\'' + hs.id + '\')">Xoá</button>';
+                    row += '<button class="btn btn-primary btn-sm mx-2" type="button" onclick="editHocSinh(\'' + hs.id + '\')">Sửa</button>';
+                    row += '<button class="btn btn-danger btn-sm mx-2" type="button" onclick="deleteHocSinh(\'' + hs.id + '\')">Xoá</button>';
                     row += '</td>';
+                    {% endif %}
                     row += '</tr>';
                     $('#tableData').append(row);
                 });
             });
         });
+    {% if edit %}
         $('#btnAdd').click(function(){
             $.get('/api/newHS', {}, function (data) {
                 var modal = `
@@ -167,7 +163,9 @@
                 })
             });
         })
+    {% endif %}
     });
+{% if edit %}
     function deleteHocSinh(id) {
         if (confirm("Bạn có chắc chắn muốn xoá học sinh này?")) {
             $.post('/api/deleteHS', {
@@ -231,5 +229,6 @@
             }
         });
     }
+{% endif %}
 </script>
 {% endblock %}

@@ -70,5 +70,41 @@
                 "class": "btn btn-success"
             }
         ]
+    },
+    {
+        "title": "Điểm số",
+        "image": "diemso_logo.png",
+        "style": "height: 150px; margin-top: 1rem;",
+        "content": "Quản lý, sửa đổi thông tin về điểm số của môn học",
+        "links": [
+            {
+                "url": "/diemso/edit",
+                "text": "Sửa hồ sơ",
+                "class": "btn btn-primary"
+            },
+            {
+                "url": "/diemso/search",
+                "text": "Tìm kiếm hồ sơ",
+                "class": "btn btn-success"
+            }
+        ]
+    },
+    {
+        "title": "Tổ chức",
+        "image": "tochuc_logo.png",
+        "style": "height: 150px; margin-top: 1rem;",
+        "content": "Quản lý, sửa đổi thông tin về tổ chức trong trường",
+        "links": [
+            {
+                "url": "/tochuc/edit",
+                "text": "Sửa hồ sơ",
+                "class": "btn btn-primary"
+            },
+            {
+                "url": "/tochuc/search",
+                "text": "Tìm kiếm hồ sơ",
+                "class": "btn btn-success"
+            }
+        ]
     }
 ]

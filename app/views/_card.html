@@ -3,7 +3,7 @@
         {% for item in data %}
         <div class="col-md-6 col-lg-4 mt-4">
             <div class="card text-center">
-                <img class="img-fluid mx-auto d-block" style="{{ style }}" src="{{ url_for('static', filename='img/'+item.image) }}" alt="{{ alt }}">
+                <img class="img-fluid mx-auto d-block" style="{{ item.style }}" src="{{ url_for('static', filename='img/'+item.image) }}" alt="{{ item.alt }}">
                 <div class="card-block">
                     <h4 class="card-title">{{ item.title }}</h4>
                     <p class="card-text">{{ item.content }}</p>
