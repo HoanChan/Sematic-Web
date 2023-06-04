@@ -1,9 +1,9 @@
 from flask import render_template, request, jsonify
 from models import onto, default_world, destroy_entity
 from utils import toDate
-from .mainCtrl import *
 
 def search_HS(hoTen, hocLop, ngaySinh, gioiTinh):
+    print(f'search_HS: hoTen = {hoTen}, hocLop = {hocLop}, ngaySinh = {ngaySinh}, gioiTinh = {gioiTinh}')
     query_str = """
     PREFIX s: <http://hc.com/school#>
     SELECT ?hs
@@ -26,6 +26,7 @@ def search_HS(hoTen, hocLop, ngaySinh, gioiTinh):
                                     'gioiTinh': hs[0].gioiTinh}, result))
     return dsHS
 def delete_HS(id):
+    print(f'delete_HS: id = {id}')
     hs = onto.search_one(iri = f'*#{id}', type = onto.HocSinh)
     if hs:
         destroy_entity(hs)
@@ -33,19 +34,20 @@ def delete_HS(id):
     return False
 
 def get_HS(id):
-    hs = onto.search_one(iri = f'*#{id}', type = onto.HocSinh)
+    print(f'get_HS: id = {id}')
+    hs = onto.search_one(name = id, type = onto.HocSinh)
     return hs
 
 def new_HS():
     hs = onto.HocSinh()
-    return hs.iri.split('#')[1], hs
+    return hs.name, hs
 
 def save_HS(id, hoTen, hocLop, ngaySinh, gioiTinh):
-    print('save_HS', id, hoTen, hocLop, ngaySinh, gioiTinh)
-    hs = onto.search_one(iri = f'*#{id}', type = onto.HocSinh)
+    print(f'save_HS: id = {id}, hoTen = {hoTen}, hocLop = {hocLop}, ngaySinh = {ngaySinh}, gioiTinh = {gioiTinh}')
+    hs = onto.search_one(name = id, type = onto.HocSinh)
     if hs:
         hs.hoTen = hoTen
-        hs.hocLop = onto.search_one(iri = f'*#{hocLop}', type = onto.LopHoc)            
+        hs.hocLop = onto.search_one(name = hocLop, type = onto.LopHoc)            
         hs.ngaySinh = ngaySinh
         hs.gioiTinh = gioiTinh
         return True
@@ -54,13 +56,13 @@ def save_HS(id, hoTen, hocLop, ngaySinh, gioiTinh):
 def initRouteHS(app):        
     @app.route("/hocSinh/edit")
     def hocSinhEdit():
-        dsLop = get_dsLop()
+        dsLop = onto.LopHoc.instances()
         dsHS = []
         return render_template("hocSinh.html", dsLop=dsLop, dsHS=dsHS, edit=True)
 
     @app.route("/hocSinh/search")
     def hocSinhSearch():
-        dsLop = get_dsLop()
+        dsLop = onto.LopHoc.instances()
         dsHS = []
         return render_template("hocSinh.html", dsLop=dsLop, dsHS=dsHS, edit=False)
 
@@ -84,13 +86,13 @@ def initRouteHS(app):
     def api_getHS():
         id = request.args.get('id')
         hs = get_HS(id)
-        dsLop = get_dsLop()
+        dsLop = onto
         return render_template("_HS.html", dsLop=dsLop, hs=hs)
 
     @app.route('/api/newHS', methods=['GET'])
     def api_newHS():
         id, hs = new_HS()
-        dsLop = get_dsLop()
+        dsLop = onto
         return {'id':id, 'html': render_template("_HS.html", dsLop=dsLop, hs=hs)}
 
     @app.route('/api/saveHS', methods=['POST'])
