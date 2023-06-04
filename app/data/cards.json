@@ -6,7 +6,7 @@
         "content": "Quản lý, sửa đổi thông tin của học sinh",
         "links": [
             {
-                "url": "/hocSinh",
+                "url": "/hocSinh/edit",
                 "text": "Sửa hồ sơ",
                 "class": "btn btn-primary"
             },
@@ -18,18 +18,18 @@
         ]
     },
     {
-        "title": "Giáo viên",
-        "image": "giaoVien_logo.png",
+        "title": "Giáo viên / Nhân Viên",
+        "image": "nhanVien_logo.png",
         "style": "height: 150px; margin-top: 1rem;",
         "content": "Quản lý, sửa đổi thông tin của giáo viên",
         "links": [
             {
-                "url": "/giaoVien/edit",
+                "url": "/nhanVien/edit",
                 "text": "Sửa hồ sơ",
                 "class": "btn btn-primary"
             },
             {
-                "url": "/giaoVien/search",
+                "url": "/nhanVien/search",
                 "text": "Tìm kiếm hồ sơ",
                 "class": "btn btn-success"
             }
