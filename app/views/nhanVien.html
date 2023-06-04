@@ -33,7 +33,7 @@
                     <select class="form-control" id="selectToChuc">
                         <option value="">Tất cả</option>
                         {% for tc in dsToChuc %}
-                        <option value="{{ tc.id }}">{{ tc.ten }}</option>
+                        <option value="{{ tc.name }}">{{ tc.ten }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -74,7 +74,9 @@
                     <th>Tổ chức</th>
                     <th>Ngày sinh</th>
                     <th>Giới tính</th>
+                    {% if edit %}
                     <th>Thao tác</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody id="tableData"> </tbody>

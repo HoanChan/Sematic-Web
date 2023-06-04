@@ -1,9 +1,9 @@
 from flask import render_template, request, jsonify
 from models import onto, default_world, destroy_entity
 from utils import toDate
-from .mainCtrl import *
 
 def search_NV(hoTen, toChuc, ngaySinh, gioiTinh):
+    print(f'search_NV: hoTen = {hoTen}, toChuc = {toChuc}, ngaySinh = {ngaySinh}, gioiTinh = {gioiTinh}')
     query_str = """
     PREFIX s: <http://hc.com/school#>
     SELECT ?nv
@@ -25,6 +25,7 @@ def search_NV(hoTen, toChuc, ngaySinh, gioiTinh):
                                     'gioiTinh': nv[0].gioiTinh}, result))
     return dsNV
 def delete_NV(id):
+    print(f'delete_NV: id = {id}')
     nv = onto.search_one(iri = f'*#{id}', type = onto.NhanVien)
     if nv:
         destroy_entity(nv)
@@ -32,6 +33,7 @@ def delete_NV(id):
     return False
 
 def get_NV(id):
+    print(f'get_NV: id = {id}')
     nv = onto.search_one(iri = f'*#{id}', type = onto.NhanVien)
     return nv
 
@@ -40,7 +42,7 @@ def new_NV():
     return nv.iri.split('#')[1], nv
 
 def save_NV(id, hoTen, toChuc, ngaySinh, gioiTinh):
-    print('save_NV', id, hoTen, toChuc, ngaySinh, gioiTinh)
+    print(f'save_NV: id = {id}, hoTen = {hoTen}, toChuc = {toChuc}, ngaySinh = {ngaySinh}, gioiTinh = {gioiTinh}')
     nv = onto.search_one(iri = f'*#{id}', type = onto.NhanVien)
     if nv:
         nv.hoTen = hoTen
@@ -53,13 +55,15 @@ def save_NV(id, hoTen, toChuc, ngaySinh, gioiTinh):
 def initRouteNV(app):        
     @app.route("/nhanVien/edit")
     def nhanVienEdit():
-        dsToChuc = get_dsToChuc(includeClass=False)
+        dsLop = onto.LopHoc.instances()
+        dsToChuc = [tc for tc in onto.ToChuc.instances() if tc not in dsLop]
         dsNV = []
         return render_template("nhanVien.html", dsToChuc=dsToChuc, dsNV=dsNV, edit=True)
 
     @app.route("/nhanVien/search")
     def nhanVienSearch():
-        dsToChuc = get_dsToChuc(includeClass=False)
+        dsLop = onto.LopHoc.instances()
+        dsToChuc = [tc for tc in onto.ToChuc.instances() if tc not in dsLop]
         dsNV = []
         return render_template("nhanVien.html", dsToChuc=dsToChuc, dsNV=dsNV, edit=False)
 
@@ -83,13 +87,16 @@ def initRouteNV(app):
     def api_getNV():
         id = request.args.get('id')
         nv = get_NV(id)
-        dsToChuc = get_dsToChuc(includeClass=False)
-        return render_template("_NV.html", dsToChuc=dsToChuc, nv=nv)
+        dsLop = onto.LopHoc.instances()
+        dsToChuc = [tc for tc in onto.ToChuc.instances() if tc not in dsLop]
+        dsChucVu = onto.ChucVu.instances()
+        return render_template("_NV.html", dsToChuc=dsToChuc, dsChucVu=dsChucVu, nv=nv)
 
     @app.route('/api/newNV', methods=['GET'])
     def api_newNV():
         id, nv = new_NV()
-        dsToChuc = get_dsToChuc(includeClass=False)
+        dsLop = onto.LopHoc.instances()
+        dsToChuc = [tc for tc in onto.ToChuc.instances() if tc not in dsLop]
         return {'id':id, 'html': render_template("_NV.html", dsToChuc=dsToChuc, nv=nv)}
 
     @app.route('/api/saveNV', methods=['POST'])

@@ -30,10 +30,10 @@
             <h5 class="card-title">Thông tin nhân viên</h5>
             <div class="mb-3">
                 <label for="selectToChuc" class="form-label">Tổ chức:</label>
-                <select class="form-select" id="editSelectToChuc">
+                <select class="form-select" id="editSelectToChuc" multiple>
                     <option value="">Chọn tổ chức</option>
                     {% for tc in dsToChuc %}
-                    <option value="{{ tc.id }}" {% if tc.ten==nv.toChuc.ten %}selected{% endif %}>{{ tc.ten }}</option>
+                    <option value="{{ tc.name }}" {% if tc in nv.toChuc %}selected{% endif %}>{{ tc.ten }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -45,7 +45,7 @@
                 <label for="inputChucVu" class="form-label">Chức vụ:</label>
                 <select class="form-select" id="editSelectChucVu" multiple>
                     {% for chucVu in dsChucVu %}
-                    <option value="{{ chucVu }}" {% if chucVu in nv.chucVu %}selected{% endif %}>{{ chucVu }}</option>
+                    <option value="{{ chucVu.name }}" {% if chucVu in nv.chucVu %}selected{% endif %}>{{ chucVu.ten }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -63,7 +63,7 @@
                 <label for="inputDayMon" class="form-label">Dạy môn:</label>
                 <select class="form-select" id="editInputDayMon" multiple>
                     {% for monHoc in dsMonHoc %}
-                    <option value="{{ monHoc }}" {% if monHoc in nv.dayMon %}selected{% endif %}>{{ monHoc }}</option>
+                    <option value="{{ monHoc.name }}" {% if monHoc in nv.dayMon %}selected{% endif %}>{{ monHoc }}</option>
                     {% endfor %}
                 </select>
             </div>
