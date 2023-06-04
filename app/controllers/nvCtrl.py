@@ -8,7 +8,7 @@ def search_NV(hoTen, toChuc, ngaySinh, gioiTinh):
     PREFIX s: <http://hc.com/school#>
     SELECT ?nv
     WHERE {
-        ?nv a s:NhanVien.
+        {?nv a s:NhanVien.} UNION {?nv a s:GiaoVien.}
     """
     if hoTen: query_str += '?nv s:hoTen ?hoTen.' + f'FILTER(REGEX(?hoTen, ".*{hoTen}.*","i")).'
     if toChuc: query_str += '?nv s:toChuc ?tc. ' + f'FILTER(STRENDS(STR(?tc), "#{toChuc}")).'
