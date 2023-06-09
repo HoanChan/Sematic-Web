@@ -1,5 +1,5 @@
 from flask import render_template, request, jsonify
-from models import onto, default_world, destroy_entity
+from models import default_world, onto, destroy_entity
 from utils import toDate
 
 def search_HS(hoTen, hocLop, ngaySinh, gioiTinh):
@@ -35,7 +35,7 @@ def delete_HS(id):
 
 def get_HS(id):
     print(f'get_HS: id = {id}')
-    hs = onto.search_one(name = id, type = onto.HocSinh)
+    hs = onto.search_one(iri = f'*#{id}', type = onto.HocSinh)
     return hs
 
 def new_HS():
@@ -44,7 +44,7 @@ def new_HS():
 
 def save_HS(id, hoTen, hocLop, ngaySinh, gioiTinh):
     print(f'save_HS: id = {id}, hoTen = {hoTen}, hocLop = {hocLop}, ngaySinh = {ngaySinh}, gioiTinh = {gioiTinh}')
-    hs = onto.search_one(name = id, type = onto.HocSinh)
+    hs = onto.search_one(iri = f'*#{id}', type = onto.HocSinh)
     if hs:
         hs.hoTen = hoTen
         hs.hocLop = onto.search_one(name = hocLop, type = onto.LopHoc)            
@@ -86,13 +86,13 @@ def initRouteHS(app):
     def api_getHS():
         id = request.args.get('id')
         hs = get_HS(id)
-        dsLop = onto
+        dsLop = onto.LopHoc.instances()
         return render_template("_HS.html", dsLop=dsLop, hs=hs)
 
     @app.route('/api/newHS', methods=['GET'])
     def api_newHS():
         id, hs = new_HS()
-        dsLop = onto
+        dsLop = onto.LopHoc.instances()
         return {'id':id, 'html': render_template("_HS.html", dsLop=dsLop, hs=hs)}
 
     @app.route('/api/saveHS', methods=['POST'])

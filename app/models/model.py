@@ -108,10 +108,10 @@ with onto:
     rule.set_as_rule(''' HocSinh(?hs) ^ cha(?hs, ?c)  ^ me(?hs, ?m) -> phuHuynh(?hs, ?c) ^ phuHuynh(?hs, ?m)  ''')
     rule = Imp()
     rule.set_as_rule(''' HocSinh(?hs) ^ cha(?hs, ?ph1) ^ me(?hs, ?ph2) -> vo(?ph1, ?ph2) ^ chong(?ph2, ?ph1) ''')
-    rule = Imp()
-    rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nam") -> anh(?hs1, ?hs2) ^ em(?hs2,?hs1) ''')
-    rule = Imp()
-    rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nữ") -> chi(?hs1, ?hs2) ^ em(?hs2,?hs1) ''')
+    # rule = Imp()
+    # rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nam") -> anh(?hs1, ?hs2) ^ em(?hs2,?hs1) ''')
+    # rule = Imp()
+    # rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nữ") -> chi(?hs1, ?hs2) ^ em(?hs2,?hs1) ''')
     rule = Imp()
     rule.set_as_rule(''' HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 8.0) -> hocLuc(?hs, "Giỏi") ''')
     rule = Imp()
@@ -143,11 +143,11 @@ with onto:
     # rule.set_as_rule(''' HocSinh(?hs) ^ diemSo(?hs, ?ds) ^ heSo1(?ds, ?hs1) ^ heSo2(?ds, ?hs2) ^ heSo3(?ds, ?hs3) ^ listConcat(?list, ?hs1, ?hs2, ?hs2, ?hs3, ?hs3, ?hs3) ^ length(?list, ?len) ^ add(?tong, ?list) ^ divide(?dtb, ?tong, ?len) ^ round(?kq, ?dtb, 2) -> diemTB(?hs, ?kq)''')
 
     # Giáo viên làm tổ trưởng của tổ nào thì có phòng làm việc là phòng của tổ đó
-    rule = Imp()
-    rule.set_as_rule(''' GiaoVien(?gv) ^ chucVu(?gv, ?dscv) ^ ChucVu(?cv) ^ endsWith(?cv,"cvToTruong") ^ member(?cv,?dscv) ^ toChuc(?gv,?tc) ^ phong(?tc,?p) -> phongLamViec(?gv, ?p) ''')
+    # rule = Imp()
+    # rule.set_as_rule(''' GiaoVien(?gv) ^ chucVu(?gv, ?dscv) ^ ChucVu(?cv) ^ endsWith(?cv,"cvToTruong") ^ member(?cv,?dscv) ^ toChuc(?gv,?tc) ^ phong(?tc,?p) -> phongLamViec(?gv, ?p) ''')
     # Giáo viên chủ nhiệm lớp nào thì có phòng làm việc là lớp đó
-    rule = Imp()
-    rule.set_as_rule(''' LopHoc(?lh) ^ giaoVienChuNhiem(?lh,?gv) ^ phong(?lh,?p) -> phongLamViec(?gv, ?p) ''')
+    # rule = Imp()
+    # rule.set_as_rule(''' LopHoc(?lh) ^ giaoVienChuNhiem(?lh,?gv) ^ phong(?lh,?p) -> phongLamViec(?gv, ?p) ''')
     ####### Các hàm hỗ trợ: #######
 #     _BUILTINS = { "equal", "notEqual", "lessThan", "lessThanOrEqual", "greaterThan", "greaterThanOrEqual",
 #               "add", "subtract", "multiply", "divide", "integerDivide", "mod", "pow", "unaryPlus", "unaryMinus",

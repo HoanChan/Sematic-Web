@@ -1,6 +1,7 @@
 import random
 import datetime 
-from .model import *
+try: from model import *
+except: from .model import *
 from owlready2 import *
 
 def createDateTime(date_obj:datetime.date, hour=0, minute=0, second=0):

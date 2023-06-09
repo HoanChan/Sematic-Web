@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template
 import json
+from owlready2 import get_ontology
 
 app = Flask(__name__, template_folder="views", static_folder="static")
 

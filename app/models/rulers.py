@@ -1,7 +1,8 @@
-from .model import *
 from owlready2 import *
+try: from model import *
+except: from .model import *
 
-def apply_rules():
+def apply_rules(onto):
 
     # HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nam") -> anh(?hs1, ?hs2) ^ em(?hs2,?hs1)
     # HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nữ") -> chi(?hs1, ?hs2) ^ em(?hs2,?hs1)
@@ -65,25 +66,45 @@ def apply_rules():
     #                 phong_lam_viec.has_teacher.append(gv)
     #                 phong_lam_viec.has_room.append(p)
     # # LopHoc(?lh) ^ giaoVienChuNhiem(?lh,?gv) ^ phong(?lh,?p) -> phongLamViec(?gv, ?p)
-    # for lh in onto.LopHoc.instances():
-    #     gv = lh.giaoVienChuNhiem[0]
-    #     p = lh.phong[0]
-    #     phong_lam_viec = onto.PhongLamViec()
-    #     phong_lam_viec.has_teacher.append(gv)
-    #     phong_lam_viec.has_room.append(p)
+    for lh in onto.LopHoc.instances():
+        gv = lh.giaoVienChuNhiem
+        p = lh.phong
+        gv.phongLamViec=p
 
-def startSyncPellet():
+isPalletRunning = False
+def startSyncPellet(onto):
+    global isPalletRunning
+    if isPalletRunning: return
     with onto:
         sync_reasoner_pellet(infer_property_values = True, infer_data_property_values = True)
+        isPalletRunning = True
 
-def startSyncHermiT():
+def checkHermitRulers(onto):
+    # Remove SWRL rules using built-in atoms
+    for rule in onto.get_swrl_rules():
+        if any(isinstance(atom, SWRLBuiltInAtom) for atom in rule.body) or any(isinstance(atom, SWRLBuiltInAtom) for atom in rule.head):
+            print("Removing rule:", rule)
+            onto.remove(rule)
+            
+isHermitRunning = False
+def startSyncHermiT(onto):
+    # checkHermitRulers(onto)
+    global isHermitRunning
+    if isHermitRunning: return
     with onto:
-        sync_reasoner(infer_property_values = True, infer_data_property_values = True)
+        sync_reasoner(debug=True, infer_property_values = True)
+        isHermitRunning = True
     
-def stopSyncPellet():
+def stopSyncPellet(onto):
+    global isPalletRunning
+    if not isPalletRunning: return
     with onto:
         sync_reasoner_pellet.stop()
+        isPalletRunning = False
 
-def stopSyncHermiT():
+def stopSyncHermiT(onto):
+    global isHermitRunning
+    if not isHermitRunning: return
     with onto:
         sync_reasoner.stop()
+        isHermitRunning = False
