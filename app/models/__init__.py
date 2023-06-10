@@ -4,3 +4,4 @@ from owlready2 import *
 onto = get_ontology("app/data/education.owl").load()
 # rulers.apply_rules()
 rulers.startSyncPellet(onto)
+# rulers.startSyncHermiT(onto)

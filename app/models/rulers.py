@@ -72,7 +72,7 @@ def apply_rules(onto):
         gv.phongLamViec=p
 
 isPalletRunning = False
-def startSyncPellet(onto):
+def startSyncPellet(onto): # Theo wiki thì pellet không hỗ trợ Date, Time, Duration, Lists Built-Ins
     global isPalletRunning
     if isPalletRunning: return
     with onto:
