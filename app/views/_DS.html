@@ -1,7 +1,7 @@
 <div class="d-flex flex-wrap justify-content-between">
 
     {% for subject in subjects %}
-    <div class="card mb-3 w-50">
+    <div class="card mb-3 w-50" id="{{subject['id']}}">
         <div class="card-body">
             <h5 class="card-title">Điểm môn {{subject['ten']}}</h5>
             <div class="mb-3">
@@ -31,7 +31,7 @@
             </div>
             <div class="mb-3">
                 <label for="{{subject['id']}}TB" class="form-label">Điểm trung bình</label>
-                <input type="text" class="form-control" id="{{subject['id']}}TB" aria-label="{{subject['id']}}TB" value="{{subject['diemTB']}}">
+                <input type="text" class="form-control" id="{{subject['id']}}TB" aria-label="{{subject['id']}}TB" disabled value="{{subject['diemTB']}}">
             </div>
         </div>
     </div>

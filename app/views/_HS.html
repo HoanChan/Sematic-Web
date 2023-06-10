@@ -119,4 +119,37 @@
             })
         });
     }
+    function layDiemSo() {
+        ids = [{% for diem in hs.diemSo %}"{{diem.monHoc.name}}",{% endfor %}];
+        const diemList = {};
+        ids.forEach((id) => {
+            
+            const hs1 = [$('#'+id+'11').val(), $('#'+id+'12').val(), $('#'+id+'13').val()];
+            const hs2 = [$('#'+id+'21').val()];
+            const hs3 = [$('#'+id+'31').val()];
+
+            diemList[id]={
+                id: id,
+                hs1: hs1,
+                hs2: hs2,
+                hs3: hs3
+            };
+        });
+
+        return diemList;
+    }
+    function saveDiemSo(id) {
+        dsDiem = layDiemSo();
+        console.log(dsDiem);
+        $.post('/api/saveDS', {
+            id: id,
+            dsDiem: dsDiem
+        }, function (data) {
+            if (data) {
+                //alert("Sửa điểm thành công!");
+            } else {
+                alert("Sửa điểm thất bại!");
+            }
+        });
+    }
 </script>
