@@ -17,5 +17,8 @@ initRouteHS(app)
 from controllers.nvCtrl import initRouteNV
 initRouteNV(app)
 
+from controllers.dsCtrl import initRouteDS
+initRouteDS(app)
+
 if __name__ == "__main__":
     app.run(debug=True)

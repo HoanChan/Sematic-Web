@@ -76,9 +76,9 @@
                 <label for="inputDiemTB" class="form-label">Điểm trung bình:</label>
                 <div class="input-group">
                     <input type="text" class="form-control" disabled aria-describedby="btnEditDiemTB" id="editInputDiemTB" value="{{ hs.diemTB }}">
-                    <button class="btn btn-outline-secondary" type="button" id="btnEditDiemTB">Sửa</button>
+                    <button class="btn btn-outline-secondary" type="button" id="btnEditDiemTB" onclick="showDiemSo('{{ hs.name }}')">Sửa</button>
                 </div>
-                
+
             </div>
             <div class="mb-3">
                 <label for="inputDanhHieu" class="form-label">Danh hiệu:</label>
@@ -88,3 +88,35 @@
     </div>
 
 </div>
+
+<script>
+    function showDiemSo(id) {
+        $.get('/api/getDS', {
+            id: id
+        }, function (data) {
+            var modal = `
+            <div class="modal fade" id="modalEditDiemSo" aria-labelledby="modalEditDiemSoLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditDiemSoLabel">Chỉnh sửa thông tin Điểm số của học sinh: {{hs.hoTen}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ${data}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="$('#modalEditDiemSo').modal('hide');saveDiemSo('${id}')">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+            $('body').append(modal);
+            $('#modalEditDiemSo').modal('show');
+            $('#modalEditDiemSo').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                $('#modalEditDiemSo').remove();
+            })
+        });
+    }
+</script>
