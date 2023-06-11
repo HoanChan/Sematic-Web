@@ -52,20 +52,25 @@ def save_NV(id, hoTen, toChuc, ngaySinh, gioiTinh):
         return True
     return False
 
+def getdsTC():
+    dsLop = onto.LopHoc.instances()
+    dsToChuc = []
+    for tc in onto.ToChuc.instances():
+        print(tc.is_a)
+        if tc not in dsLop:
+            dsToChuc.append(tc)
+    return dsToChuc
+
 def initRouteNV(app):        
     @app.route("/nhanVien/edit")
     def nhanVienEdit():
-        dsLop = onto.LopHoc.instances()
-        dsToChuc = [tc for tc in onto.ToChuc.instances() if tc not in dsLop]
-        dsNV = []
-        return render_template("nhanVien.html", dsToChuc=dsToChuc, dsNV=dsNV, edit=True)
+        return render_template("nhanVien.html", dsToChuc=getdsTC(), dsNV=[], edit=True)
 
     @app.route("/nhanVien/search")
     def nhanVienSearch():
-        dsLop = onto.LopHoc.instances()
-        dsToChuc = [tc for tc in onto.ToChuc.instances() if tc not in dsLop]
+        dsToChuc = getdsTC()
         dsNV = []
-        return render_template("nhanVien.html", dsToChuc=dsToChuc, dsNV=dsNV, edit=False)
+        return render_template("nhanVien.html", dsToChuc=getdsTC(), dsNV=[], edit=False)
 
     @app.route('/api/dsNV', methods=['GET'])
     def api_dsNV():
@@ -87,17 +92,13 @@ def initRouteNV(app):
     def api_getNV():
         id = request.args.get('id')
         nv = get_NV(id)
-        dsLop = onto.LopHoc.instances()
-        dsToChuc = [tc for tc in onto.ToChuc.instances() if tc not in dsLop]
         dsChucVu = onto.ChucVu.instances()
-        return render_template("_NV.html", dsToChuc=dsToChuc, dsChucVu=dsChucVu, nv=nv)
+        return render_template("_NV.html", dsToChuc=getdsTC(), dsChucVu=dsChucVu, nv=nv)
 
     @app.route('/api/newNV', methods=['GET'])
     def api_newNV():
         id, nv = new_NV()
-        dsLop = onto.LopHoc.instances()
-        dsToChuc = [tc for tc in onto.ToChuc.instances() if tc not in dsLop]
-        return {'id':id, 'html': render_template("_NV.html", dsToChuc=dsToChuc, nv=nv)}
+        return {'id':id, 'html': render_template("_NV.html", dsToChuc=getdsTC(), nv=nv)}
 
     @app.route('/api/saveNV', methods=['POST'])
     def api_saveNV():
