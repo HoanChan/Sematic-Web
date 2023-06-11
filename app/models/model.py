@@ -54,7 +54,7 @@ with onto:
     class me(HocSinh >> Me, FunctionalProperty): is_a = [phuHuynh]        
     class cha(HocSinh >> Cha, FunctionalProperty): is_a = [phuHuynh]        
     class diemSo(HocSinh >> DiemSo): pass
-    class diemTB(HocSinh >> float, FunctionalProperty): pass
+    class diemTB(HocSinh >> float, FunctionalProperty): pass # Đáng lý phải được suy ra từ tập luật nhưng không viết được
     class hanhKiem(HocSinh >> str, FunctionalProperty): pass
     # -------- Các thuộc tính của Giáo viên -------- #
     class dayMon(GiaoVien >> MonHoc):pass
@@ -74,7 +74,7 @@ with onto:
     class heSo1(DiemSo >> float): pass
     class heSo2(DiemSo >> float): pass
     class heSo3(DiemSo >> float): pass
-    class diemTB(DiemSo >> float, FunctionalProperty): pass
+    class diemTB(DiemSo >> float, FunctionalProperty): pass # Đáng lý phải được suy ra từ tập luật nhưng không viết được
     # -------- Các thuộc tính của Giảng dạy -------- #
     class giaoVien(GiangDay >> GiaoVien, FunctionalProperty): inverse_property = giangDay
     class lopHoc(GiangDay >> LopHoc, FunctionalProperty): pass
