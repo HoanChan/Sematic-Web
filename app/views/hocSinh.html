@@ -214,12 +214,14 @@
         var hocLop = $('#editSelectHocLop').val();
         var ngaySinh = $('#editInputNgaySinh').val();
         var gioiTinh = $('#editSelectGioiTinh').val();
+        var hanhKiem = $('#editSelectHanhKiem').val();
         $.post('/api/saveHS', {
             id: id,
             hoTen: hoTen,
             hocLop: hocLop,
             ngaySinh: ngaySinh,
-            gioiTinh: gioiTinh
+            gioiTinh: gioiTinh,
+            hanhKiem: hanhKiem
         }, function (data) {
             if (data) {
                 //alert("Sửa học sinh thành công!");

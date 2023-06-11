@@ -45,7 +45,7 @@ def initRouteDS(app):
         # dsDiem = request.form.get('dsDiem') # Không chịu chạy = None luôn
         dsDiem = {}
         strRQ = str(request.form)
-        print(f'strRQ = {strRQ}')
+        # print(f'strRQ = {strRQ}')
         for match in re.finditer(r"\('([^']*)', '([^']*)'\)", strRQ):
             key, value = match.group(1), match.group(2)
             if key.startswith("dsDiem["):

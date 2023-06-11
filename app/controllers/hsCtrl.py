@@ -42,14 +42,15 @@ def new_HS():
     hs = onto.HocSinh()
     return hs.name, hs
 
-def save_HS(id, hoTen, hocLop, ngaySinh, gioiTinh):
-    print(f'save_HS: id = {id}, hoTen = {hoTen}, hocLop = {hocLop}, ngaySinh = {ngaySinh}, gioiTinh = {gioiTinh}')
+def save_HS(id, hoTen, hocLop, ngaySinh, gioiTinh, hanhKiem):
+    print(f'save_HS: id = {id}, hoTen = {hoTen}, hocLop = {hocLop}, ngaySinh = {ngaySinh}, gioiTinh = {gioiTinh}, hanhKiem = {hanhKiem}')
     hs = onto.search_one(iri = f'*#{id}', type = onto.HocSinh)
     if hs:
         hs.hoTen = hoTen
-        hs.hocLop = onto.search_one(name = hocLop, type = onto.LopHoc)            
+        hs.hocLop = onto.search_one(iri = f'*#{hocLop}', type = onto.LopHoc)            
         hs.ngaySinh = ngaySinh
         hs.gioiTinh = gioiTinh
+        hs.hanhKiem = hanhKiem
         return True
     return False
 
@@ -102,5 +103,6 @@ def initRouteHS(app):
         hocLop = request.form.get('hocLop')
         ngaySinh = request.form.get('ngaySinh')
         gioiTinh = request.form.get('gioiTinh')
-        result = save_HS(id, hoTen, hocLop, ngaySinh, gioiTinh)
+        hanhKiem = request.form.get('hanhKiem')
+        result = save_HS(id, hoTen, hocLop, ngaySinh, gioiTinh, hanhKiem)
         return jsonify(result)
