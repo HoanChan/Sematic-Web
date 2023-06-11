@@ -1,5 +1,6 @@
 from flask import render_template, request, jsonify
 from models import default_world, onto, destroy_entity
+from models.rulers import apply_DiemSoHS_Rules
 from utils import toDate
 
 def search_HS(hoTen, hocLop, ngaySinh, gioiTinh):
@@ -51,6 +52,7 @@ def save_HS(id, hoTen, hocLop, ngaySinh, gioiTinh, hanhKiem):
         hs.ngaySinh = ngaySinh
         hs.gioiTinh = gioiTinh
         hs.hanhKiem = hanhKiem
+        apply_DiemSoHS_Rules(hs) # Áp dụng luật tính danh hiệu
         return True
     return False
 

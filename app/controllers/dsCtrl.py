@@ -1,5 +1,6 @@
 from flask import render_template, request, jsonify
 from models import onto
+from models.rulers import apply_DiemSoHS_Rules
 try: from hsCtrl import get_HS
 except: from .hsCtrl import get_HS
 import re
@@ -13,10 +14,11 @@ def save_DS(id, dsDiem):
             diem.heSo1 = ds['hs1']
             diem.heSo2 = ds['hs2']
             diem.heSo3 = ds['hs3']
-            conDiem = (ds['hs1']+ds['hs2']*2 + ds['hs3']*3)
-            diem.diemTB = round(sum(conDiem)/len(conDiem),2) # Tính điểm trung bình vì chưa có luật để tính tự động
-        # Tính điểm trung bình chung
-        hs.diemTB = round(sum([x.diemTB for x in hs.diemSo])/len(hs.diemSo),2)
+        #     conDiem = (ds['hs1']+ds['hs2']*2 + ds['hs3']*3)
+        #     diem.diemTB = round(sum(conDiem)/len(conDiem),2) # Tính điểm trung bình vì chưa có luật để tính tự động
+        # # Tính điểm trung bình chung
+        # hs.diemTB = round(sum([x.diemTB for x in hs.diemSo])/len(hs.diemSo),2)
+        apply_DiemSoHS_Rules(hs) # Áp dụng luật tính điểm và học lực và danh hiệu
         return True
     return False
 
