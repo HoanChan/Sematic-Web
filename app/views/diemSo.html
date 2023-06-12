@@ -46,6 +46,7 @@
         </div>
         <div class="form-group text-center my-4">
             <button class="btn btn-primary" type="button" id="btnSearch"><i class="fa fa-search"></i>Tìm kiếm</button>
+            <button class="btn btn-success" type="button" id="btnSave"><i class="fa fa-save"></i>Lưu</button>
         </div>
     </div>
 </div>
@@ -101,17 +102,17 @@
                 $('#tableData').empty();
 
                 $.each(data, function (index, data) {
-                    var row = '<tr>';
-                    row += '<td>' + data.hoTen + '</td>';
-                    row += '<td>' + formatDate(data.ngaySinh) + '</td>';
-                    row += '<td>' + data.gioiTinh + '</td>';
-                    row += '<td>' + data.heSo1[0] + '</td>';
-                    row += '<td>' + data.heSo1[1] + '</td>';
-                    row += '<td>' + data.heSo1[2] + '</td>';
-                    row += '<td>' + data.heSo2[0] + '</td>';
-                    row += '<td>' + data.heSo3[0] + '</td>';
-                    row += '<td>' + data.diemTB + '</td>';                
-                    row += '</tr>';
+                    var row = `<tr id="${data.id}">
+                        <td>${data.hoTen}</td>
+                        <td>${formatDate(data.ngaySinh)}</td>
+                        <td>${data.gioiTinh}</td>
+                        <td><input id="${data.id}hs11" type="text" class="form-control" value="${data.heSo1[0]}"></td>
+                        <td><input id="${data.id}hs12" type="text" class="form-control" value="${data.heSo1[1]}"></td>
+                        <td><input id="${data.id}hs13" type="text" class="form-control" value="${data.heSo1[2]}"></td>
+                        <td><input id="${data.id}hs21" type="text" class="form-control" value="${data.heSo2[0]}"></td>
+                        <td><input id="${data.id}hs31" type="text" class="form-control" value="${data.heSo3[0]}"></td>
+                        <td>${data.diemTB}</td>
+                    </tr>`;
                     $('#tableData').append(row);
                 });
             });
