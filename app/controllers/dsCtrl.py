@@ -1,9 +1,34 @@
 from flask import render_template, request, jsonify
-from models import onto
+from models import onto, default_world
 from models.rulers import apply_DiemSoHS_Rules
 try: from hsCtrl import get_HS
 except: from .hsCtrl import get_HS
 import re
+
+def search_DS(lop, mon):
+    print(f'search_DS: lop = {lop}, mon = {mon}')
+    query_str = """
+    PREFIX s: <http://hc.com/school#>
+    SELECT ?ds
+    WHERE {
+        ?ds a s:DiemSo.
+    """
+    if mon: query_str += '?ds s:monHoc ?mon.' + f'FILTER(STRENDS(STR(?mon), "#{mon}")).'
+    if lop: query_str += '?ds s:hocSinh ?hs. ?hs s:hocLop ?lop.' + f'FILTER(STRENDS(STR(?lop), "#{lop}")).'
+    query_str += '}'
+    # print(query_str)
+    result = default_world.sparql(query_str)
+    dsDS = []
+    if result:
+        dsDS = list(map(lambda ds: {'id': ds[0].name,
+                                    'hoTen': ds[0].hocSinh.hoTen,
+                                    'ngaySinh': ds[0].hocSinh.ngaySinh, 
+                                    'gioiTinh': ds[0].hocSinh.gioiTinh,
+                                    'heSo1':ds[0].heSo1,
+                                    'heSo2':ds[0].heSo2,
+                                    'heSo3':ds[0].heSo3,
+                                    'diemTB':ds[0].diemTB}, result))
+    return dsDS
 
 def save_DS(id, dsDiem):
     print(f'save_DS: id = {id}, dsDiem = {dsDiem}')
@@ -69,3 +94,23 @@ def initRouteDS(app):
 
         result = save_DS(id, dsDiem)
         return jsonify(result)
+    
+    @app.route("/diemSo/edit")
+    def diemSoEdit():
+        dsLop = onto.LopHoc.instances()
+        dsMon = onto.MonHoc.instances()
+        return render_template("diemSo.html", dsLop=dsLop, dsMon=dsMon, edit=True)
+
+    @app.route("/diemSo/search")
+    def diemSoSearch():
+        dsLop = onto.LopHoc.instances()
+        dsMon = onto.MonHoc.instances()
+        return render_template("diemSo.html", dsLop=dsLop, dsMon=dsMon, edit=False)
+    
+    @app.route('/api/dsDS', methods=['GET'])
+    def api_dsDS():
+        lop = request.args.get('lop')
+        mon = request.args.get('mon')
+        dsDS = search_DS(lop = lop, mon = mon)
+        # Đóng gói danh sách học sinh dưới dạng một mảng JSON và trả về cho người dùng
+        return jsonify(dsDS)
