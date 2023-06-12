@@ -22,6 +22,7 @@ with onto:
     class Phong(Thing): pass
     class HoatDong(Thing): pass
     class DiemDanh(Thing): pass
+    class ThietBi(Thing): pass
     
     # -------- Các thuộc tính của Đối tượng -------- #
     # InverseFunctionalProperty: Giống khoá chính trong SQL, không được trùng
@@ -93,6 +94,10 @@ with onto:
     class hoatDong(DiemDanh >> HoatDong, FunctionalProperty): pass
     class ngayGio(DiemDanh >> datetime.datetime, FunctionalProperty): pass
     class trangThai(DiemDanh >> str, FunctionalProperty): pass
+    # -------- Các thuộc tính của Thiết bị -------- #
+    class ten(ThietBi >> str, FunctionalProperty): pass
+    class soLuong(ThietBi >> int, FunctionalProperty): pass
+    class phong(ThietBi >> Phong, FunctionalProperty): pass
     # -------- Các thuộc tính của Sử dụng cho Ruler - Không nhập dữ liệu mà dựa vào tập luật để sinh ra -------- #
     class anhChiEm(HocSinh >> HocSinh): pass
     class anh(HocSinh >> Anh): is_a = [anhChiEm] 

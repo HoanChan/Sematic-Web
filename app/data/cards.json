@@ -2,7 +2,7 @@
     {
         "title": "Học sinh",
         "image": "hocSinh_logo.png",
-        "style": "height: 150px; margin-top: 1rem;",
+        "style": "height: 140px; margin-top: 1rem;",
         "content": "Quản lý, sửa đổi thông tin của học sinh",
         "links": [
             {
@@ -20,7 +20,7 @@
     {
         "title": "Giáo viên / Nhân Viên",
         "image": "nhanVien_logo.png",
-        "style": "height: 150px; margin-top: 1rem;",
+        "style": "height: 140px; margin-top: 1rem;",
         "content": "Quản lý, sửa đổi thông tin của giáo viên",
         "links": [
             {
@@ -38,7 +38,7 @@
     {
         "title": "Lớp học",
         "image": "lopHoc_logo.png",
-        "style": "height: 150px; margin-top: 1rem;",
+        "style": "height: 140px; margin-top: 1rem;",
         "content": "Quản lý, sửa đổi thông tin của lớp học",
         "links": [
             {
@@ -56,7 +56,7 @@
     {
         "title": "Môn học",
         "image": "monHoc_logo.png",
-        "style": "height: 150px; margin-top: 1rem;",
+        "style": "height: 140px; margin-top: 1rem;",
         "content": "Quản lý, sửa đổi thông tin của môn học",
         "links": [
             {
@@ -74,16 +74,16 @@
     {
         "title": "Điểm số",
         "image": "diemso_logo.png",
-        "style": "height: 150px; margin-top: 1rem;",
+        "style": "height: 140px; margin-top: 1rem;",
         "content": "Quản lý, sửa đổi thông tin về điểm số của môn học",
         "links": [
             {
-                "url": "/diemso/edit",
+                "url": "/diemSo/edit",
                 "text": "Sửa hồ sơ",
                 "class": "btn btn-primary"
             },
             {
-                "url": "/diemso/search",
+                "url": "/diemSo/search",
                 "text": "Tìm kiếm hồ sơ",
                 "class": "btn btn-success"
             }
@@ -91,17 +91,71 @@
     },
     {
         "title": "Tổ chức",
-        "image": "tochuc_logo.png",
-        "style": "height: 150px; margin-top: 1rem;",
+        "image": "toChuc_logo.png",
+        "style": "height: 140px; margin-top: 1rem;",
         "content": "Quản lý, sửa đổi thông tin về tổ chức trong trường",
         "links": [
             {
-                "url": "/tochuc/edit",
+                "url": "/toChuc/edit",
                 "text": "Sửa hồ sơ",
                 "class": "btn btn-primary"
             },
             {
-                "url": "/tochuc/search",
+                "url": "/toChuc/search",
+                "text": "Tìm kiếm hồ sơ",
+                "class": "btn btn-success"
+            }
+        ]
+    },
+    {
+        "title": "Giảng dạy",
+        "image": "giangDay_logo.png",
+        "style": "height: 140px; margin-top: 1rem;",
+        "content": "Quản lý, sửa đổi thông tin về phân công giảng dạy",
+        "links": [
+            {
+                "url": "/giangDay/edit",
+                "text": "Sửa hồ sơ",
+                "class": "btn btn-primary"
+            },
+            {
+                "url": "/giangDay/search",
+                "text": "Tìm kiếm hồ sơ",
+                "class": "btn btn-success"
+            }
+        ]
+    },
+    {
+        "title": "Hoạt động",
+        "image": "hoatDong_logo.png",
+        "style": "height: 140px; margin-top: 1rem;",
+        "content": "Quản lý, sửa đổi thông tin về các hoạt động",
+        "links": [
+            {
+                "url": "/hoatDong/edit",
+                "text": "Sửa hồ sơ",
+                "class": "btn btn-primary"
+            },
+            {
+                "url": "/hoatDong/search",
+                "text": "Tìm kiếm hồ sơ",
+                "class": "btn btn-success"
+            }
+        ]
+    },
+    {
+        "title": "Thiết bị",
+        "image": "thietBi_logo.png",
+        "style": "height: 140px; margin-top: 1rem;",
+        "content": "Quản lý, sửa đổi thông tin về các thiết bị",
+        "links": [
+            {
+                "url": "/thietBi/edit",
+                "text": "Sửa hồ sơ",
+                "class": "btn btn-primary"
+            },
+            {
+                "url": "/thietBi/search",
                 "text": "Tìm kiếm hồ sơ",
                 "class": "btn btn-success"
             }
