@@ -1,0 +1,190 @@
+{% extends "_layout.html" %}
+{% block title %}Danh sách Tổ chức / Lớp học{% endblock %}
+{% block head %}
+<style>
+    @media(min-width: 768px) {
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: inline-block;
+            width: 120px;
+            margin-right: 10px;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<!-- Phần bảng điều khiển -->
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4 text-center my-4">Danh sách Tổ chức / Lớp học</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="inputSearch">Tên:</label>
+                    <input type="text" class="form-control" id="inputSearch" placeholder="Nhập tên Tổ chức / Lớp học...">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="selectType">Loại:</label>
+                    <select class="form-control" id="selectType">
+                        <option value="">Tất cả</option>
+                        {% for tc in dsTC %}
+                        <option value="{{ tc.name }}">{{ tc.ten }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>            
+        </div>
+        <div class="form-group text-center my-4">
+            <button class="btn btn-primary" type="button" id="btnSearch"><i class="fa fa-search"></i>Tìm kiếm</button>
+            {%if edit:%}
+            <button class="btn btn-success" type="button" id="btnAdd"><i class="fa fa-plus"></i>Thêm mới</button>
+            {%endif%}
+        </div>
+    </div>
+</div>
+
+<!-- Phần hiển thị dữ liệu -->
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tên</th>
+                    <th>Loại</th>
+                    {% if edit %}
+                    <th>Thao tác</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody id="tableData"> </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('#btnSearch').click(function () {
+            var ten = $('#inputSearch').val();
+            var loai = $('#selectType').val();
+
+            $.get('/api/dsTC', {
+                ten: ten,
+                loai: loai
+            }, function (data) {
+                $('#tableData').empty();
+
+                $.each(data, function (index, tc) {
+                    var row = '<tr>';
+                    row += '<td>' + tc.ten + '</td>';
+                    row += '<td>' + tc.loai + '</td>';
+                {% if edit %}
+                    row += '<td>';
+                    row += '<button class="btn btn-primary btn-sm mx-2" type="button" onclick="editToChuc(\'' + tc.id + '\')">Sửa</button>';
+                    row += '<button class="btn btn-danger btn-sm mx-2" type="button" onclick="deleteToChuc(\'' + tc.id + '\')">Xoá</button>';
+                    row += '</td>';
+                {% endif %}
+                    row += '</tr>';
+                    $('#tableData').append(row);
+                });
+            });
+        });
+    {% if edit %}
+        $('#btnAdd').click(function () {
+            $.get('/api/newTC', {}, function (data) {
+                var modal = `
+                <div class="modal fade" id="modalNewToChuc" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalNewToChucLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalNewToChucLabel">Thêm mới Tổ chức / Lớp học</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${data.html}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" onclick="$('#modalNewToChuc').modal('hide');saveToChuc('${data.id}')">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `
+                $('body').append(modal);
+                $('#modalNewToChuc').modal('show');
+                $('#modalNewToChuc').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                    $('#modalNewToChuc').remove();
+                })
+            });
+        })
+    {% endif %}
+    });
+{% if edit %}
+    function deleteToChuc(id) {
+        if (confirm("Bạn có chắc chắn muốn xoá Tổ chức / Lớp học này?")) {
+            $.post('/api/deleteTC', {
+                id: id
+            }, function (data) {
+                if (data) {
+                    //alert("Xoá Tổ chức / Lớp học thành công!");
+                    $('#btnSearch').click();
+                } else {
+                    alert("Xoá Tổ chức / Lớp học thất bại!");
+                }
+            });
+        }
+    }
+    function editToChuc(id) {
+        $.get('/api/getTC', {
+            id: id
+        }, function (data) {
+            var modal = `
+            <div class="modal fade" id="modalEditToChuc" aria-labelledby="modalEditToChucLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditToChucLabel">Chỉnh sửa thông tin Tổ chức / Lớp học</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ${data}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="$('#modalEditToChuc').modal('hide');saveToChuc('${id}')">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+            $('body').append(modal);
+            $('#modalEditToChuc').modal('show');
+            $('#modalEditToChuc').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                $('#modalEditToChuc').remove();
+            })
+        });
+    }
+    function saveToChuc(id) {
+        var ten = $('#editInputTen').val();
+        var loai = $('#editSelecType').val();
+        $.post('/api/saveTC', {
+            id: id,
+            ten: ten,
+            loai: loai
+        }, function (data) {
+            if (data) {
+                //alert("Sửa Tổ chức / Lớp học thành công!");
+                $('#btnSearch').click();
+            } else {
+                alert("Sửa Tổ chức / Lớp học thất bại!");
+            }
+        });
+    }
+{% endif %}
+</script>
+{% endblock %}

@@ -19,5 +19,8 @@ initRouteNV(app)
 from controllers.dsCtrl import initRouteDS
 initRouteDS(app)
 
+from controllers.tcCtrl import initRouteTC
+initRouteTC(app)
+
 if __name__ == "__main__":
     app.run(debug=True)
