@@ -56,10 +56,10 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
     tongSoLop = soLopMoiKhoi * 3
     for i in range(tongSoLop):
         tenLop = getClassName(soLopMoiKhoi, i)
-        phong = Phong('Phong' + tenLop, ten = 'Phòng ' + tenLop)
-        dsPhong.append(phong)
-        lop = LopHoc(tenLop, ten = tenLop, phong = [phong])
+        lop = LopHoc(ten = tenLop)
         dsLop.append(lop)
+        phong = Phong('Phong' + tenLop, ten = 'Phòng ' + tenLop, suDungBoi = lop, loaiPhong = 'Phòng học')
+        dsPhong.append(phong)
         # Tạo ngẫu nhiên HS cho mỗi lớp
         for j in range(soHSMoiLop):
             ten, gt = createRandomInfo()
@@ -96,10 +96,10 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
     for id, mon, st in dataMonHoc:
         mon_hoc = MonHoc(id, ten = mon, soTiet = st)
         dsMonHoc.append(mon_hoc)
-        phong = Phong('Phong' + id, ten = 'Phòng ' + mon)
-        dsPhong.append(phong)
-        toChuyenMon = ToChuc('To' + id, ten = 'Tổ '+ mon, phong = [phong]) 
+        toChuyenMon = ToChuc('To' + id, ten = 'Tổ '+ mon) 
         dsToChuc.append(toChuyenMon)
+        phong = Phong('Phong' + id, ten = 'Phòng ' + mon, suDungBoi = toChuyenMon, loaiPhong = 'Phòng bộ môn')
+        dsPhong.append(phong)
         # Tạo ngẫu nhiên GV cho mỗi môn
         for j in range(soGVMoiMon):
             ten, gt = createRandomInfo()
@@ -184,8 +184,7 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
             ten, gt = createRandomInfo()
             nv = NhanVien(hoTen = ten, ngaySinh = createRandomDate(1960, 1995), gioiTinh = gt, toChuc = [tc], chucVu = [cv], heSoLuong = round(random.uniform(1, 9),1))
             dsNV.append(nv)
-            phong = Phong(ten = f'Phòng {cv.ten} {i+1}' if soNV > 1 else f'Phòng {cv.ten}')
-            tc.phong.append(phong)
+            phong = Phong(ten = f'Phòng {cv.ten} {i+1}' if soNV > 1 else f'Phòng {cv.ten}', suDungBoi = tc, loaiPhong = 'Phòng làm việc')
             dsPhong.append(phong)
             nv.phongLamViec = [phong]
     
@@ -209,3 +208,32 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
         for hs in hd.thamGia:
             diemDanh = DiemDanh(hoatDong = hd, nguoi = hs, ngayGio = createDateTime(hd.ngayBatDau, random.randint(7, 9)), trangThai = random.choice(['Có mặt', 'Vắng']))
             dsDiemDanh.append(diemDanh)
+
+    # Tạo thiết bị cho các phòng
+    dsThietBi = []
+    for phong in dsPhong:
+        if phong.loaiPhong == 'Phòng học':
+            ban = ThietBi(ten = 'Bàn học', phong = phong, soLuong = 12)
+            ghe = ThietBi(ten='Ghế học sinh', phong = phong, soLuong = 12)
+            bangPhan = ThietBi(ten='Bảng phấn', phong = phong, soLuong = 1)
+            banGiaoVien = ThietBi(ten='Bàn giáo viên', phong = phong, soLuong = 1)
+            gheGiaoVien = ThietBi(ten='Ghế', phong = phong, soLuong = 1)
+            tivi = ThietBi(ten='Tivi', phong = phong, soLuong = 1)
+            quat = ThietBi(ten='Quạt', phong = phong, soLuong = 4)
+            dsThietBi.extend([ban, ghe, bangPhan, banGiaoVien, gheGiaoVien, tivi, quat])
+        elif phong.loaiPhong == 'Phòng bộ môn':
+            ban = ThietBi(ten = 'Bàn lớn', phong = phong, soLuong = 2)
+            ghe = ThietBi(ten='Ghế', phong = phong, soLuong = 8)
+            bangTrang = ThietBi(ten='Bảng trắng', phong = phong, soLuong = 1)
+            quat = ThietBi(ten='Quạt', phong = phong, soLuong = 1)
+            dsThietBi.extend([ban, ghe, bangTrang, quat])
+        elif phong.loaiPhong == 'Phòng làm việc':
+            ban = ThietBi(ten = 'Bàn làm việc', phong = phong, soLuong = 1)
+            ghe = ThietBi(ten='Ghế', phong = phong, soLuong = 1)
+            mayTinh = ThietBi(ten='Máy tính', phong = phong, soLuong = 1)
+            mayIn = ThietBi(ten='Máy in', phong = phong, soLuong = 1)
+            dsThietBi.extend([ban, ghe, mayTinh, mayIn])
+
+    # Tạo thêm một số phòng bộ môn và các thiết bị trong phòng: Phòng máy tính, thực hành, thí nghiệm
+    # Tạo thêm một số phòng cho các tổ chức lớn: Đảng, Đoàn, Công đoàn, Tư vấn tâm lý, ...
+    # Thôi nhiều quá, không tạo nữa

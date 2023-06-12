@@ -82,7 +82,9 @@ with onto:
     class monHoc(GiangDay >> MonHoc, FunctionalProperty): pass
     # -------- Các thuộc tính của Phòng -------- #
     class ten(Phong >> str, FunctionalProperty): pass
-    class suDungBoi(Phong >> ToChuc): inverse_property = phong
+    class suDungBoi(Phong >> ToChuc, FunctionalProperty): inverse_property = phong
+    class dsThietBi(Phong >> ThietBi): pass
+    class loaiPhong(Phong >> str, FunctionalProperty): pass
     # -------- Các thuộc tính của Hoạt động -------- #
     class ten(HoatDong >> str, FunctionalProperty): pass
     class ngayBatDau(HoatDong >> datetime.date, FunctionalProperty): pass
@@ -97,7 +99,7 @@ with onto:
     # -------- Các thuộc tính của Thiết bị -------- #
     class ten(ThietBi >> str, FunctionalProperty): pass
     class soLuong(ThietBi >> int, FunctionalProperty): pass
-    class phong(ThietBi >> Phong, FunctionalProperty): pass
+    class phong(ThietBi >> Phong, FunctionalProperty): inverse_property = dsThietBi
     # -------- Các thuộc tính của Sử dụng cho Ruler - Không nhập dữ liệu mà dựa vào tập luật để sinh ra -------- #
     class anhChiEm(HocSinh >> HocSinh): pass
     class anh(HocSinh >> Anh): is_a = [anhChiEm] 
