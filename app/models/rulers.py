@@ -72,10 +72,10 @@ def apply_rules(onto):
     #                 phong_lam_viec.has_teacher.append(gv)
     #                 phong_lam_viec.has_room.append(p)
     # # LopHoc(?lh) ^ giaoVienChuNhiem(?lh,?gv) ^ phong(?lh,?p) -> phongLamViec(?gv, ?p)
-    for lh in onto.LopHoc.instances():
-        gv = lh.giaoVienChuNhiem
-        p = lh.phong
-        gv.phongLamViec=p
+    # for lh in onto.LopHoc.instances():
+    #     gv = lh.giaoVienChuNhiem
+    #     p = lh.phong
+    #     gv.phongLamViec=p
 
 isPalletRunning = False
 def startSyncPellet(onto): # Theo wiki thì pellet không hỗ trợ Date, Time, Duration, Lists Built-Ins
