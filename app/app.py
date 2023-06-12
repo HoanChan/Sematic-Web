@@ -28,5 +28,8 @@ initRouteLH(app)
 from controllers.mhCtrl import initRouteMH
 initRouteMH(app)
 
+from controllers.gdCtrl import initRouteGD
+initRouteGD(app)
+
 if __name__ == "__main__":
     app.run(debug=True)

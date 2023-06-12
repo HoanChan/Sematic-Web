@@ -1,0 +1,166 @@
+{% extends "_layout.html" %}
+{% block title %}Quản lý Giảng dạy{% endblock %}
+{% block head %}
+<style>
+    @media(min-width: 768px) {
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: inline-block;
+            width: 120px;
+            margin-right: 10px;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<!-- Phần bảng điều khiển -->
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4 text-center my-4">Quản lý Giảng dạy</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="selectLop">Lớp:</label>
+                    <select class="form-control" id="selectLop">
+                        <option value="">Tất cả</option>
+                        {% for lop in dsLop %}
+                        <option value="{{ lop.name }}">{{ lop.ten }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="selectMon">Môn:</label>
+                    <select class="form-control" id="selectMon">
+                        <option value="">Tất cả</option>
+                        {% for mon in dsMon %}
+                        <option value="{{ mon.name }}">{{ mon.ten }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group text-center my-4">
+            <button class="btn btn-primary" type="button" id="btnSearch"><i class="fa fa-search"></i>Tìm kiếm</button>
+            <button class="btn btn-success" type="button" id="btnSave"><i class="fa fa-save"></i>Lưu</button>
+        </div>
+    </div>
+</div>
+
+<!-- Phần hiển thị dữ liệu -->
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Lớp học</th>
+                    <th>Môn học</th>
+                    <th>Giáo viên</th>
+                </tr>
+            </thead>
+            <tbody id="tableData"> </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>    
+    $(document).ready(function () {
+        $('#btnSearch').click(function () {
+            var lop = $('#selectLop').val();
+            var mon = $('#selectMon').val();
+
+            $.get('/api/dsGD', {
+                lop : lop,
+                mon : mon
+            }, function (data) {
+                $('#tableData').empty();
+
+                $.each(data, function (index, data) {
+                    inputGV = `<select class="form-control" id="selectGV_${data.id}">`;
+                    $.each(data.dsGV, function (index, gv) {
+                        if (gv.id == data.gvID) {
+                            inputGV += `<option value="${gv.id}" selected>${gv.ten}</option>`;
+                        } else {
+                            inputGV += `<option value="${gv.id}">${gv.ten}</option>`;
+                        }
+                    });
+                    inputGV += `</select>`;
+                    var row = `<tr id="${data.id}">
+                        <td>${data.lopHoc}</td>
+                        <td>${data.monHoc}</td>
+                        <td>${inputGV}</td>
+                    </tr>`;
+                    $('#tableData').append(row);
+                });
+            });
+        });    
+    });
+{% if edit %}
+    function deleteDiemSo(id) {
+        if (confirm("Bạn có chắc chắn muốn xoá Điểm số này?")) {
+            $.post('/api/deleteGD', {
+                id: id
+            }, function (data) {
+                if (data) {
+                    //alert("Xoá Điểm số thành công!");
+                    $('#btnSearch').click();
+                } else {
+                    alert("Xoá Điểm số thất bại!");
+                }
+            });
+        }
+    }
+    function editDiemSo(id) {
+        $.get('/api/getGD', {
+            id: id
+        }, function (data) {
+            var modal = `
+            <div class="modal fade" id="modalEditDiemSo" aria-labelledby="modalEditDiemSoLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditDiemSoLabel">Chỉnh sửa thông tin Tổ chức / Điểm số</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ${data}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="$('#modalEditDiemSo').modal('hide');saveDiemSo('${id}')">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+            $('body').append(modal);
+            $('#modalEditDiemSo').modal('show');
+            $('#modalEditDiemSo').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                $('#modalEditDiemSo').remove();
+            })
+        });
+    }
+    function saveDiemSo(id) {
+        var ten = $('#editInputTen').val();
+        var loai = $('#editSelecType').val();
+        $.post('/api/saveGD', {
+            id: id,
+            ten: ten,
+            loai: loai
+        }, function (data) {
+            if (data) {
+                //alert("Sửa Tổ chức / Điểm số thành công!");
+                $('#btnSearch').click();
+            } else {
+                alert("Sửa Tổ chức / Điểm số thất bại!");
+            }
+        });
+    }
+{% endif %}
+</script>
+{% endblock %}
