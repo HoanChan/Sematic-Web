@@ -63,13 +63,13 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
         # Tạo ngẫu nhiên HS cho mỗi lớp
         for j in range(soHSMoiLop):
             ten, gt = createRandomInfo()
-            hs = HocSinh(hoTen = ten, ngaySinh = createRandomDate(2000, 2000), gioiTinh = gt, hocLop = lop)
+            hs = HocSinh(hoTen = ten, ngaySinh = createRandomDate(2000, 2000), gioiTinh = gt, hocLop = lop, trangThai = 'Đang học')
             dsHS.append(hs)
             # Tạo ngẫu nhiên 2 PH cho mỗi HS
             ten, gt = createRandomInfo()
-            hs.cha = Cha(hoTen = ten, ngaySinh = createRandomDate(1970, 1980), gioiTinh = "Nam", ngheNghiep = createRandomJob())
+            hs.cha = Cha(hoTen = ten, ngaySinh = createRandomDate(1970, 1980), gioiTinh = "Nam", ngheNghiep = createRandomJob(), trangThai = 'Còn sống')
             ten, gt = createRandomInfo()
-            hs.me = Me(hoTen = ten, ngaySinh = createRandomDate(1970, 1980), gioiTinh = "Nữ",  ngheNghiep = createRandomJob())
+            hs.me  = Me(hoTen = ten, ngaySinh = createRandomDate(1970, 1980), gioiTinh = "Nữ",  ngheNghiep = createRandomJob(), trangThai = 'Còn sống')
         
     # Cho một số học sinh có chung phụ huynh
     random_items = random.sample(dsHS, soHSCoAnhEm)
@@ -104,7 +104,7 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
         for j in range(soGVMoiMon):
             ten, gt = createRandomInfo()
             td = ['Đại học', 'Thạc sĩ'][random.randint(0,1)]
-            gv = GiaoVien(hoTen = ten, ngaySinh = createRandomDate(1970, 1990), gioiTinh = gt, trinhDo = td, dayMon = [mon_hoc], toChuc = [toChuyenMon], heSoLuong = round(random.uniform(1, 9),1))
+            gv = GiaoVien(hoTen = ten, ngaySinh = createRandomDate(1970, 1990), gioiTinh = gt, trinhDo = td, dayMon = [mon_hoc], toChuc = [toChuyenMon], heSoLuong = round(random.uniform(1, 9),1), trangThai = 'Đang làm việc')
             if j == 0: gv.chucVu = [toTruong, giaoVien]
             elif j == 1: gv.chucVu = [toPho, giaoVien]   
             else: gv.chucVu = [giaoVien]         
@@ -182,7 +182,7 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
         # Tạo nhân viên
         for i in range(soNV):
             ten, gt = createRandomInfo()
-            nv = NhanVien(hoTen = ten, ngaySinh = createRandomDate(1960, 1995), gioiTinh = gt, toChuc = [tc], chucVu = [cv], heSoLuong = round(random.uniform(1, 9),1))
+            nv = NhanVien(hoTen = ten, ngaySinh = createRandomDate(1960, 1995), gioiTinh = gt, toChuc = [tc], chucVu = [cv], heSoLuong = round(random.uniform(1, 9),1), trangThai = 'Đang làm việc')
             dsNV.append(nv)
             phong = Phong(ten = f'Phòng {cv.ten} {i+1}' if soNV > 1 else f'Phòng {cv.ten}', suDungBoi = tc, loaiPhong = 'Phòng làm việc')
             dsPhong.append(phong)
@@ -233,7 +233,14 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
             mayTinh = ThietBi(ten='Máy tính', phong = phong, soLuong = 1)
             mayIn = ThietBi(ten='Máy in', phong = phong, soLuong = 1)
             dsThietBi.extend([ban, ghe, mayTinh, mayIn])
-
     # Tạo thêm một số phòng bộ môn và các thiết bị trong phòng: Phòng máy tính, thực hành, thí nghiệm
     # Tạo thêm một số phòng cho các tổ chức lớn: Đảng, Đoàn, Công đoàn, Tư vấn tâm lý, ...
     # Thôi nhiều quá, không tạo nữa
+
+    # Làm cho vài HS nghỉ học, vài giáo viên / nhân viên về hưu, vài phụ huynh chết
+    for hs in random.sample(dsHS, 5):
+        hs.trangThai = random.choice(['Đã nghỉ học', 'Đã chuyển trường'])
+    for nv in random.sample(dsGV + dsNV, 2):
+        nv.trangThai = 'Đã về hưu'
+    for ph in random.sample([x.cha for x in dsHS] + [x.me for x in dsHS], 2):
+        ph.trangThai = 'Đã chết'

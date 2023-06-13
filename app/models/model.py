@@ -38,6 +38,7 @@ with onto:
     class hoTen(Nguoi >> str, FunctionalProperty): pass
     class ngaySinh(Nguoi >> datetime.date, FunctionalProperty): pass
     class gioiTinh(Nguoi >> str, FunctionalProperty): pass
+    class trangThai(Nguoi >> str, FunctionalProperty): pass
     class toChuc(Nguoi >> ToChuc): 
         inverse_property = thanhVien # Đảo ngược thuộc tính, nếu có 1 người thuộc 1 tổ chức thì tổ chức đó có 1 thành viên là người đó
     # -------- Các thuộc tính của Nhân viên -------- #
