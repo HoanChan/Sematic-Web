@@ -21,6 +21,8 @@ def search_DS(lop, mon):
     dsDS = []
     if result:
         dsDS = list(map(lambda ds: {'id': ds[0].name,
+                                    'lop':ds[0].hocSinh.hocLop.ten,
+                                    'mon':ds[0].monHoc.ten,
                                     'hoTen': ds[0].hocSinh.hoTen,
                                     'ngaySinh': ds[0].hocSinh.ngaySinh, 
                                     'gioiTinh': ds[0].hocSinh.gioiTinh,

@@ -13,6 +13,9 @@
             margin-right: 10px;
         }
     }
+    td .form-control {
+        width: 4em;
+    }
 </style>
 {% endblock %}
 {% block content %}
@@ -24,7 +27,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="selectLop">Lớp:</label>
-                    <select class="form-control" id="selectLop">
+                    <select class="form-select" id="selectLop">
                         <option value="">Tất cả</option>
                         {% for lop in dsLop %}
                         <option value="{{ lop.name }}">{{ lop.ten }}</option>
@@ -35,7 +38,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="selectMon">Môn:</label>
-                    <select class="form-control" id="selectMon">
+                    <select class="form-select" id="selectMon">
                         <option value="">Tất cả</option>
                         {% for mon in dsMon %}
                         <option value="{{ mon.name }}">{{ mon.ten }}</option>
@@ -57,6 +60,8 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Lớp</th>
+                    <th>Môn</th>
                     <th>Tên HS</th>
                     <th>Ngày sinh</th>
                     <th>Giới tính</th>
@@ -103,6 +108,8 @@
 
                 $.each(data, function (index, data) {
                     var row = `<tr id="${data.id}">
+                        <td>${data.lop}</td>
+                        <td>${data.mon}</td>
                         <td>${data.hoTen}</td>
                         <td>${formatDate(data.ngaySinh)}</td>
                         <td>${data.gioiTinh}</td>
