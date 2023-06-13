@@ -1,68 +1,50 @@
 {% extends "_layout.html" %}
-{% block title %}Danh sách Tổ chức / Lớp học{% endblock %}
+{% block title %}Tổ chức{% endblock %}
 {% block head %}
 <style>
-    @media(min-width: 768px) {
-        .form-group {
-            margin-bottom: 0;
-        }
-
-        .form-group label {
-            display: inline-block;
-            width: 120px;
-            margin-right: 10px;
-        }
+    .card {
+        width: 32%;
     }
 </style>
 {% endblock %}
 {% block content %}
-<!-- Phần bảng điều khiển -->
-<div class="row">
-    <div class="col-md-12">
-        <h1 class="mb-4 text-center my-4">Danh sách Tổ chức / Lớp học</h1>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="inputSearch">Tên:</label>
-                    <input type="text" class="form-control" id="inputSearch" placeholder="Nhập tên Tổ chức / Lớp học...">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="selectType">Loại:</label>
-                    <select class="form-select" id="selectType">
-                        <option value="">Tất cả</option>
-                        {% for tc in dsTC %}
-                        <option value="{{ tc.name }}">{{ tc.ten }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>            
-        </div>
-        <div class="form-group text-center my-4">
-            <button class="btn btn-primary" type="button" id="btnSearch"><i class="fa fa-search"></i>Tìm kiếm</button>
-            {%if edit:%}
-            <button class="btn btn-success" type="button" id="btnAdd"><i class="fa fa-plus"></i>Thêm mới</button>
-            {%endif%}
-        </div>
-    </div>
-</div>
 
 <!-- Phần hiển thị dữ liệu -->
 <div class="row">
     <div class="col-md-12">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Tên</th>
-                    <th>Loại</th>
-                    {% if edit %}
-                    <th>Thao tác</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody id="tableData"> </tbody>
-        </table>
+        <div class="d-flex flex-wrap justify-content-between">
+
+            {% for toChuc in dsToChuc %}
+            <div class="card my-3" id="{{toChuc.name}}">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">{{toChuc.ten}}</h5>
+                    <button class="btn btn-success" type="button" onclick="window.location.href='/toChuc/{{toChuc.id}}'">Lưu</button>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="{{toChuc.name}}ten" class="form-label">Tên tổ chức</label>
+                        <input type="text" class="form-control" id="{{toChuc.name}}ten" aria-label="{{toChuc.name}}ten" value="{{toChuc.ten}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{toChuc.name}}slThanhVien" class="form-label">Số lượng thành viên</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="{{toChuc.name}}slThanhVien" disabled aria-describedby="btnEdit{{toChuc.name}}slThanhVien" value="{{ toChuc.slThanhVien }}">
+                            <button class="btn btn-outline-secondary" type="button" id="btnEdit{{toChuc.name}}slThanhVien">Sửa</button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{toChuc.name}}ten" class="form-label">Phòng</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="{{toChuc.name}}phong" disabled aria-describedby="btnEdit{{toChuc.name}}phong" value="{{ toChuc.phong }}">
+                            <button class="btn btn-outline-secondary" type="button" id="btnEdit{{toChuc.name}}phong">Sửa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
     </div>
 </div>
 {% endblock %}
@@ -84,18 +66,18 @@
                     var row = '<tr>';
                     row += '<td>' + tc.ten + '</td>';
                     row += '<td>' + tc.loai + '</td>';
-                {% if edit %}
+                    {% if edit %}
                     row += '<td>';
                     row += '<button class="btn btn-primary btn-sm mx-2" type="button" onclick="editToChuc(\'' + tc.id + '\')">Sửa</button>';
                     row += '<button class="btn btn-danger btn-sm mx-2" type="button" onclick="deleteToChuc(\'' + tc.id + '\')">Xoá</button>';
                     row += '</td>';
-                {% endif %}
+                    {% endif %}
                     row += '</tr>';
                     $('#tableData').append(row);
                 });
             });
         });
-    {% if edit %}
+        {% if edit %}
         $('#btnAdd').click(function () {
             $.get('/api/newTC', {}, function (data) {
                 var modal = `
@@ -103,7 +85,7 @@
                     <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="modalNewToChucLabel">Thêm mới Tổ chức / Lớp học</h5>
+                                <h5 class="modal-title" id="modalNewToChucLabel">Thêm mới Tổ chức</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -123,19 +105,19 @@
                 })
             });
         })
-    {% endif %}
+        {% endif %}
     });
-{% if edit %}
+    {% if edit %}
     function deleteToChuc(id) {
-        if (confirm("Bạn có chắc chắn muốn xoá Tổ chức / Lớp học này?")) {
+        if (confirm("Bạn có chắc chắn muốn xoá Tổ chức này?")) {
             $.post('/api/deleteTC', {
                 id: id
             }, function (data) {
                 if (data) {
-                    //alert("Xoá Tổ chức / Lớp học thành công!");
+                    //alert("Xoá Tổ chức thành công!");
                     $('#btnSearch').click();
                 } else {
-                    alert("Xoá Tổ chức / Lớp học thất bại!");
+                    alert("Xoá Tổ chức thất bại!");
                 }
             });
         }
@@ -149,7 +131,7 @@
                 <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalEditToChucLabel">Chỉnh sửa thông tin Tổ chức / Lớp học</h5>
+                            <h5 class="modal-title" id="modalEditToChucLabel">Chỉnh sửa thông tin Tổ chức</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -178,13 +160,13 @@
             loai: loai
         }, function (data) {
             if (data) {
-                //alert("Sửa Tổ chức / Lớp học thành công!");
+                //alert("Sửa Tổ chức thành công!");
                 $('#btnSearch').click();
             } else {
-                alert("Sửa Tổ chức / Lớp học thất bại!");
+                alert("Sửa Tổ chức thất bại!");
             }
         });
     }
-{% endif %}
+    {% endif %}
 </script>
 {% endblock %}

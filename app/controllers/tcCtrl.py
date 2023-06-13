@@ -49,17 +49,24 @@ def save_TC(id, ten, hocLop, ngaySinh, gioiTinh, hanhKiem):
         tc.hanhKiem = hanhKiem
         return True
     return False
-
+def get_dsTC():    
+    dsToChuc = []
+    dsLop = onto.LopHoc.instances()
+    for tc in [x for x in onto.ToChuc.instances() if x not in dsLop]:
+        ten = tc.ten
+        phong = tc.phong.ten if tc.phong else ""
+        slThanhVien = len(tc.thanhVien)
+        tc = {'ten': ten, 'phong': phong, 'slThanhVien': slThanhVien}
+        dsToChuc.append(tc)
+    return dsToChuc
 def initRouteTC(app):        
     @app.route("/toChuc/edit")
     def toChucEdit():
-        dsTC = [{'name':'ToChuc','ten':'Tổ chức'},{'name':'LopHoc','ten':'Lớp học'}]
-        return render_template("toChuc.html", dsTC = dsTC, edit=True)
+        return render_template("toChuc.html", dsToChuc = get_dsTC(), edit=True)
 
     @app.route("/toChuc/search")
     def toChucSearch():
-        dsTC = [{'name':'ToChuc','ten':'Tổ chức'},{'name':'LopHoc','ten':'Lớp học'}]
-        return render_template("toChuc.html", dsTC = dsTC, edit=False)
+        return render_template("toChuc.html", dsToChuc = get_dsTC(), edit=False)
 
     @app.route('/api/dsTC', methods=['GET'])
     def api_dsTC():
