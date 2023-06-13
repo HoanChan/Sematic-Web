@@ -30,7 +30,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="selectLop">Lớp:</label>
-                    <select class="form-control" id="selectLop">
+                    <select class="form-select" id="selectLop">
                         <option value="">Tất cả</option>
                         {% for lop in dsLop %}
                         <option value="{{ lop.name }}">{{ lop.ten }}</option>
@@ -47,7 +47,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="selectGioiTinh">Giới tính:</label>
-                    <select class="form-control" id="selectGioiTinh">
+                    <select class="form-select" id="selectGioiTinh">
                         <option value="">Tất cả</option>
                         <option value="Nam">Nam</option>
                         <option value="Nữ">Nữ</option>

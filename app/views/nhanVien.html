@@ -19,7 +19,7 @@
 <!-- Phần bảng điều khiển -->
 <div class="row">
     <div class="col-md-12">
-        <h1 class="mb-4 text-center my-4">Danh sách nhân viên</h1>
+        <h1 class="mb-4 text-center my-4">Danh sách Giáo viên / Nhân viên</h1>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -30,7 +30,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="selectToChuc">Tổ chức:</label>
-                    <select class="form-control" id="selectToChuc">
+                    <select class="form-select" id="selectToChuc">
                         <option value="">Tất cả</option>
                         {% for tc in dsToChuc %}
                         <option value="{{ tc.name }}">{{ tc.ten }}</option>
@@ -47,7 +47,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="selectGioiTinh">Giới tính:</label>
-                    <select class="form-control" id="selectGioiTinh">
+                    <select class="form-select" id="selectGioiTinh">
                         <option value="">Tất cả</option>
                         <option value="Nam">Nam</option>
                         <option value="Nữ">Nữ</option>
