@@ -74,6 +74,7 @@
                     <th>Lớp</th>
                     <th>Ngày sinh</th>
                     <th>Giới tính</th>
+                    <th>Trạng thái</th>
                     {% if edit %}
                     <th>Thao tác</th>
                     {% endif %}
@@ -124,6 +125,7 @@
                     row += '<td>' + hs.hocLop + '</td>';
                     row += '<td>' + formatDate(hs.ngaySinh) + '</td>';
                     row += '<td>' + hs.gioiTinh + '</td>';
+                    row += '<td>' + hs.trangThai + '</td>';
                     {% if edit %}
                     row += '<td>';
                     row += '<button class="btn btn-primary btn-sm mx-2" type="button" onclick="editHocSinh(\'' + hs.id + '\')">Sửa</button>';

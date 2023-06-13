@@ -22,7 +22,8 @@ def search_NV(hoTen, toChuc, ngaySinh, gioiTinh):
                                     'hoTen': nv[0].hoTen, 
                                     'toChuc': ', '.join([x.ten for x in nv[0].toChuc]), 
                                     'ngaySinh': nv[0].ngaySinh, 
-                                    'gioiTinh': nv[0].gioiTinh}, result))
+                                    'gioiTinh': nv[0].gioiTinh,
+                                    'trangThai': nv[0].trangThai}, result))
     return dsNV
 def delete_NV(id):
     print(f'delete_NV: id = {id}')

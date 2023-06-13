@@ -74,6 +74,7 @@
                     <th>Tổ chức</th>
                     <th>Ngày sinh</th>
                     <th>Giới tính</th>
+                    <th>Trạng thái</th>
                     {% if edit %}
                     <th>Thao tác</th>
                     {% endif %}
@@ -122,6 +123,7 @@
                     row += '<td>' + nv.toChuc + '</td>';
                     row += '<td>' + formatDate(nv.ngaySinh) + '</td>';
                     row += '<td>' + nv.gioiTinh + '</td>';
+                    row += '<td>' + nv.trangThai + '</td>';
                 {% if edit %}
                     row += '<td>';
                     row += '<button class="btn btn-primary btn-sm mx-2" type="button" onclick="editNhanVien(\'' + nv.id + '\')">Sửa</button>';

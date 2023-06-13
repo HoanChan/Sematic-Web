@@ -24,7 +24,8 @@ def search_HS(hoTen, hocLop, ngaySinh, gioiTinh):
                                     'hoTen': hs[0].hoTen, 
                                     'hocLop': hs[0].hocLop.ten, 
                                     'ngaySinh': hs[0].ngaySinh, 
-                                    'gioiTinh': hs[0].gioiTinh}, result))
+                                    'gioiTinh': hs[0].gioiTinh,
+                                    'trangThai': hs[0].trangThai}, result))
     return dsHS
 def delete_HS(id):
     print(f'delete_HS: id = {id}')
