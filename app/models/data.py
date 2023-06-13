@@ -114,16 +114,18 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
     for hs in dsHS:
         # Tạo điểm số cho từng HS
         tb = random.randint(3, 10)
+        dsTB=[]
         for mon_hoc in dsMonHoc:
-            hs1 = [randScore(tb),randScore(tb),randScore(tb)]
-            hs2 = [randScore(tb)]
-            hs3 = [randScore(tb)]
-            diemTB = round((sum(hs1) + sum(hs2)*2 + sum(hs3)*3) / (len(hs1) + len(hs2)*2 + len(hs3)*3),2)
-            diem = DiemSo(hocSinh = hs, monHoc = mon_hoc, heSo1 = hs1, heSo2 = hs2, heSo3 = hs3, diemTB = diemTB)
-        hs.diemTB = round(sum(d.diemTB for d in hs.diemSo) / len(hs.diemSo),2)
+            tx1, tx2, tx3, gk, ck = randScore(tb), randScore(tb), randScore(tb), randScore(tb), randScore(tb)
+            diem = DiemSo(hocSinh = hs, monHoc = mon_hoc, tx1 = tx1, tx2 = tx2, tx3 = tx3, gk = gk, ck = ck)
+            diemTB = round((tx1+tx2+tx3+gk*2+ck*3)/8, 2)
+            # diem.diemTB = diemTB
+            dsTB.append(diemTB)
+        TongdiemTB = round(sum(dsTB) / len(dsTB),2)
+        # hs.diemTB = TongdiemTB
         # Tính hạnh kiểm
-        if hs.diemTB >= 6.5: hs.hanhKiem = random.choice(['Tốt','Khá'])
-        elif hs.diemTB >= 5: hs.hanhKiem = random.choice(['Khá','Trung bình'])
+        if TongdiemTB >= 6.5: hs.hanhKiem = random.choice(['Tốt','Khá'])
+        elif TongdiemTB >= 5: hs.hanhKiem = random.choice(['Khá','Trung bình'])
         else: hs.hanhKiem = random.choice(['Trung bình','Yếu'])
 
     # Cho một số GV dạy 2 môn

@@ -26,9 +26,11 @@ def search_DS(lop, mon):
                                     'hoTen': ds[0].hocSinh.hoTen,
                                     'ngaySinh': ds[0].hocSinh.ngaySinh, 
                                     'gioiTinh': ds[0].hocSinh.gioiTinh,
-                                    'heSo1':ds[0].heSo1,
-                                    'heSo2':ds[0].heSo2,
-                                    'heSo3':ds[0].heSo3,
+                                    'tx1':ds[0].tx1,
+                                    'tx2':ds[0].tx2,
+                                    'tx3':ds[0].tx3,
+                                    'gk':ds[0].gk,
+                                    'ck':ds[0].ck,
                                     'diemTB':ds[0].diemTB}, result))
     return dsDS
 
@@ -38,9 +40,11 @@ def save_DS(id, dsDiem):
     if hs:
         for diem in hs.diemSo:
             ds = dsDiem[diem.monHoc.name]
-            diem.heSo1 = ds['hs1']
-            diem.heSo2 = ds['hs2']
-            diem.heSo3 = ds['hs3']
+            diem.tx1 = ds['tx1']
+            diem.tx2 = ds['tx2']
+            diem.tx3 = ds['tx3']
+            diem.gk = ds['gk']
+            diem.ck = ds['ck']
         #     conDiem = (ds['hs1']+ds['hs2']*2 + ds['hs3']*3)
         #     diem.diemTB = round(sum(conDiem)/len(conDiem),2) # Tính điểm trung bình vì chưa có luật để tính tự động
         # # Tính điểm trung bình chung
@@ -60,11 +64,13 @@ def initRouteDS(app):
         for diem in hs.diemSo:
             idMon = diem.monHoc.name
             tenMon = diem.monHoc.ten
-            hs1 = [x for x in diem.heSo1]
-            hs2 = [x for x in diem.heSo2]
-            hs3 = [x for x in diem.heSo3]
+            tx1 = diem.tx1
+            tx2 = diem.tx2
+            tx3 = diem.tx3
+            gk = diem.gk
+            ck = diem.ck
             diemTB = diem.diemTB
-            ds.append({'id': idMon, 'ten': tenMon, 'hs1': hs1, 'hs2': hs2, 'hs3': hs3, 'diemTB': diemTB})            
+            ds.append({'id': idMon, 'ten': tenMon, 'tx1': tx1, 'tx2': tx2, 'tx3': tx3, 'gk': gk, 'ck': ck, 'diemTB': diemTB})            
         
         return render_template("_DS.html", subjects=ds)
     
@@ -89,10 +95,10 @@ def initRouteDS(app):
                     dsDiem[subject][field] = []
                 # Thêm giá trị vào dsDiem
                 if field == 'id':
-                    dsDiem[subject][field] += [value]
+                    dsDiem[subject][field] = value
                 else:
                     if value:
-                        dsDiem[subject][field].append(float(value))
+                        dsDiem[subject][field] = float(value)
 
         result = save_DS(id, dsDiem)
         return jsonify(result)

@@ -124,15 +124,19 @@
         const diemList = {};
         ids.forEach((id) => {
             
-            const hs1 = [$('#'+id+'11').val(), $('#'+id+'12').val(), $('#'+id+'13').val()];
-            const hs2 = [$('#'+id+'21').val()];
-            const hs3 = [$('#'+id+'31').val()];
+            const tx1 = $('#'+id+'tx1').val()
+            const tx2 = $('#'+id+'tx2').val()
+            const tx3 = $('#'+id+'tx3').val();
+            const gk = $('#'+id+'gk').val();
+            const ck = $('#'+id+'ck').val();
 
             diemList[id]={
                 id: id,
-                hs1: hs1,
-                hs2: hs2,
-                hs3: hs3
+                tx1: tx1,
+                tx2: tx2,
+                tx3: tx3,
+                gk: gk,
+                ck: ck
             };
         });
 

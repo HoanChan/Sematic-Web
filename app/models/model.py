@@ -73,9 +73,11 @@ with onto:
     class hocSinh(DiemSo >> HocSinh, FunctionalProperty): 
         inverse_property = diemSo
     class monHoc(DiemSo >> MonHoc, FunctionalProperty): pass
-    class heSo1(DiemSo >> float): pass
-    class heSo2(DiemSo >> float): pass
-    class heSo3(DiemSo >> float): pass
+    class tx1(DiemSo >> float, FunctionalProperty): pass
+    class tx2(DiemSo >> float, FunctionalProperty): pass
+    class tx3(DiemSo >> float, FunctionalProperty): pass
+    class gk(DiemSo >> float, FunctionalProperty): pass
+    class ck(DiemSo >> float, FunctionalProperty): pass
     class diemTB(DiemSo >> float, FunctionalProperty): pass # Đáng lý phải được suy ra từ tập luật nhưng không viết được
     # -------- Các thuộc tính của Giảng dạy -------- #
     class giaoVien(GiangDay >> GiaoVien, FunctionalProperty): inverse_property = giangDay
@@ -120,6 +122,8 @@ with onto:
     # rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nam") -> anh(?hs1, ?hs2) ^ em(?hs2,?hs1) ''')
     # rule = Imp()
     # rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nữ") -> chi(?hs1, ?hs2) ^ em(?hs2,?hs1) ''')
+    rule = Imp()
+    rule.set_as_rule(''' DiemSo(?ds) ^ tx1(?ds, ?d1) ^ tx2(?ds, ?d2) ^ tx3(?ds, ?d3) ^ gk(?ds, ?d4) ^ ck(?ds, ?d5) ^ add(?t, ?d1, ?d2, ?d3, ?d4, ?d4, ?d5, ?d5, ?d5) ^ multiply(?p, ?t, 100) ^ divide(?c, ?p, 8) ^ floor(?r, ?c) ^ divide(?rs, ?r, 100) -> diemTB(?ds, ?rs) ''')
     rule = Imp()
     rule.set_as_rule(''' HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 8.0) -> hocLuc(?hs, "Giỏi") ''')
     rule = Imp()

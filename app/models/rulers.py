@@ -21,7 +21,7 @@ def apply_DiemSoHS_Rules(hs):
 
     # Tính điểm số cho từng HS
     for diem in hs.diemSo:
-        diemTB = round((sum(diem.heSo1) + sum(diem.heSo2)*2 + sum(diem.heSo3)*3) / (len(diem.heSo1) + len(diem.heSo2)*2 + len(diem.heSo3)*3),2)
+        diemTB = round((diem.tx1+diem.tx2+diem.tx3+diem.gk*2+diem.ck*3)/8, 2)
         diem.diemTB = diemTB
     hs.diemTB = round(sum(d.diemTB for d in hs.diemSo) / len(hs.diemSo),2)
 
