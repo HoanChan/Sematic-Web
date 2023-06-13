@@ -46,8 +46,7 @@ def initRouteLH(app):
         return render_template("lopHoc.html", dsLop = get_dsLH(), edit=True)
 
     @app.route("/lopHoc/search")
-    def lopHocSearch():        
-        dsLop = onto.LopHoc.instances()
+    def lopHocSearch():
         return render_template("lopHoc.html", dsLop = get_dsLH(), edit=False)
 
     @app.route('/api/dsLH', methods=['GET'])
