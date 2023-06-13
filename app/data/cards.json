@@ -144,18 +144,18 @@
         ]
     },
     {
-        "title": "Thiết bị",
+        "title": "Cơ sở vật chất",
         "image": "thietBi_logo.png",
         "style": "height: 140px; margin-top: 1rem;",
-        "content": "Quản lý, sửa đổi thông tin về các thiết bị",
+        "content": "Quản lý, thiết bị và các phòng",
         "links": [
             {
-                "url": "/thietBi/edit",
+                "url": "/coSoVatChat/edit",
                 "text": "Sửa hồ sơ",
                 "class": "btn btn-primary"
             },
             {
-                "url": "/thietBi/search",
+                "url": "/coSoVatChat/search",
                 "text": "Tìm kiếm hồ sơ",
                 "class": "btn btn-success"
             }
