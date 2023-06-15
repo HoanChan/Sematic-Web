@@ -1,0 +1,200 @@
+{% extends "_layout.html" %}
+{% block title %}Danh sách thiết bị{% endblock %}
+{% block head %}
+<style>
+    @media(min-width: 768px) {
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: inline-block;
+            width: 120px;
+            margin-right: 10px;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<!-- Phần bảng điều khiển -->
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4 text-center my-4">Danh sách thiết bị</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="inputSearch">Tên thiết bị:</label>
+                    <input type="text" class="form-control" id="inputSearch" placeholder="Nhập tên thiết bị...">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="selectPhong">Phòng:</label>
+                    <select class="form-select" id="selectPhong">
+                        <option value="">Tất cả</option>
+                        {% for phong in dsPhong %}
+                        <option value="{{ phong.name }}">{{ phong.ten }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group text-center my-4">
+            <button class="btn btn-primary" type="button" id="btnSearch"><i class="fa fa-search"></i>Tìm kiếm</button>
+            {% if edit %}
+            <button class="btn btn-success" type="button" id="btnAdd"><i class="fa fa-plus"></i>Thêm mới</button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Phần hiển thị dữ liệu -->
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tên</th>
+                    <th>Phòng</th>
+                    <th>Số lượng</th>
+                    {% if edit %}
+                    <th>Thao tác</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody id="tableData">
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('#btnSearch').click(function () {
+            var ten = $('#inputSearch').val();
+            var phong = $('#selectPhong').val();
+
+            $.get('/api/dsTB', {
+                ten: ten,
+                phong: phong
+            }, function (data) {
+                $('#tableData').empty();
+
+                $.each(data, function (index, tb) {
+                    var row = '<tr>';
+                    row += '<td>' + tb.ten + '</td>';
+                    row += '<td>' + tb.phong + '</td>';
+                    row += '<td>' + tb.soLuong + '</td>';
+                    {% if edit %}
+                    row += '<td>';
+                    row += '<button class="btn btn-primary btn-sm mx-2" type="button" onclick="editThietBi(\'' + tb.id + '\')">Sửa</button>';
+                    row += '<button class="btn btn-danger btn-sm mx-2" type="button" onclick="deleteThietBi(\'' + tb.id + '\')">Xoá</button>';
+                    row += '</td>';
+                    {% endif %}
+                    row += '</tr>';
+                    $('#tableData').append(row);
+                });
+            });
+        });
+    {% if edit %}
+        $('#btnAdd').click(function(){
+            $.get('/api/newTB', {}, function (data) {
+                var modal = `
+                <div class="modal fade" id="modalNewThietBi" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalNewThietBiLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalNewThietBiLabel">Thêm mới thiết bị</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${data.html}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" onclick="$('#modalNewThietBi').modal('hide');saveThietBi('${data.id}')">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `
+                $('body').append(modal);
+                $('#modalNewThietBi').modal('show');
+                $('#modalNewThietBi').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                    $('#modalNewThietBi').remove();
+                })
+            });
+        })
+    {% endif %}
+    });
+{% if edit %}
+    function deleteThietBi(id) {
+        if (confirm("Bạn có chắc chắn muốn xoá thiết bị này?")) {
+            $.post('/api/deleteTB', {
+                id: id
+            }, function (data) {
+                if (data) {
+                    //alert("Xoá thiết bị thành công!");
+                    $('#btnSearch').click();
+                } else {
+                    alert("Xoá thiết bị thất bại!");
+                }
+            });
+        }
+    }
+    function editThietBi(id) {
+        $.get('/api/getTB', {
+            id: id
+        }, function (data) {
+            var modal = `
+            <div class="modal fade" id="modalEditThietBi" aria-labelledby="modalEditThietBiLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditThietBiLabel">Chỉnh sửa thông tin thiết bị</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ${data}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="$('#modalEditThietBi').modal('hide');saveThietBi('${id}')">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+            $('body').append(modal);
+            $('#modalEditThietBi').modal('show');
+            $('#modalEditThietBi').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                $('#modalEditThietBi').remove();
+            })
+        });
+    }
+    function saveThietBi(id) {
+        var hoTen = $('#editInputHoTen').val();
+        var hocPhong = $('#editSelectHocPhong').val();
+        var ngaySinh = $('#editInputNgaySinh').val();
+        var gioiTinh = $('#editSelectGioiTinh').val();
+        var hanhKiem = $('#editSelectHanhKiem').val();
+        $.post('/api/saveTB', {
+            id: id,
+            hoTen: hoTen,
+            hocPhong: hocPhong,
+            ngaySinh: ngaySinh,
+            gioiTinh: gioiTinh,
+            hanhKiem: hanhKiem
+        }, function (data) {
+            if (data) {
+                //alert("Sửa thiết bị thành công!");
+                $('#btnSearch').click();
+            } else {
+                alert("Sửa thiết bị thất bại!");
+            }
+        });
+    }
+{% endif %}
+</script>
+{% endblock %}

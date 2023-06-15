@@ -1,0 +1,184 @@
+{% extends "_layout.html" %}
+{% block title %}Hoạt động{% endblock %}
+{% block head %}
+<style>
+    .card {
+        width: 32%;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<!-- Phần hiển thị dữ liệu -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-wrap justify-content-between">
+        
+            {% for hd in dsHD %}
+            <div class="card my-3" id="{{hd.name}}">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">{{hd.ten}}</h5>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/hd/{{hd.name}}'">Xoá</button>
+                        <button class="btn btn-outline-primary" type="button" onclick="window.location.href='/hd/{{hd.name}}'">Tải lại</button>
+                        <button class="btn btn-outline-success" type="button" onclick="window.location.href='/hd/{{hd.name}}'">Lưu</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="{{hd.name}}ten" class="form-label">Tên hoạt động</label>
+                        <input type="text" class="form-control" id="{{hd.name}}ten" aria-label="{{hd.name}}ten" value="{{hd.ten}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{hd.name}}ngayBD" class="form-label">Ngày bắt đầu</label>
+                        <input type="text" class="form-control" id="{{hd.name}}ngayBD" aria-label="{{hd.name}}ngayBD" value="{{hd.ngayBD}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{hd.name}}ngayKT" class="form-label">Ngày kết thúc</label>
+                        <input type="text" class="form-control" id="{{hd.name}}ngayKT" aria-label="{{hd.name}}ngayKT" value="{{hd.ngayKT}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{hd.name}}slQL" class="form-label">Số lượng quản lý</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="{{hd.name}}slQL" disabled aria-describedby="btnEdit{{hd.name}}slQL" value="{{ hd.slQL }}">
+                            <button class="btn btn-outline-secondary" type="button" id="btnEdit{{hd.name}}slQL">Sửa</button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{hd.name}}slTV" class="form-label">Số lượng thành viên</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="{{hd.name}}slTV" disabled aria-describedby="btnEdit{{hd.name}}slTV" value="{{ hd.slTV }}">
+                            <button class="btn btn-outline-secondary" type="button" id="btnEdit{{hd.name}}slTV">Sửa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('#btnSearch').click(function () {
+            var ten = $('#inputSearch').val();
+            var loai = $('#selectType').val();
+
+            $.get('/api/dsLH', {
+                ten: ten,
+                loai: loai
+            }, function (data) {
+                $('#tableData').empty();
+
+                $.each(data, function (index, mh) {
+                    var row = '<tr>';
+                    row += '<td>' + mh.ten + '</td>';
+                    row += '<td>' + mh.loai + '</td>';
+                {% if edit %}
+                    row += '<td>';
+                    row += '<button class="btn btn-primary btn-sm mx-2" type="button" onclick="editHoatDong(\'' + mh.id + '\')">Sửa</button>';
+                    row += '<button class="btn btn-danger btn-sm mx-2" type="button" onclick="deleteHoatDong(\'' + mh.id + '\')">Xoá</button>';
+                    row += '</td>';
+                {% endif %}
+                    row += '</tr>';
+                    $('#tableData').append(row);
+                });
+            });
+        });
+    {% if edit %}
+        $('#btnAdd').click(function () {
+            $.get('/api/newLH', {}, function (data) {
+                var modal = `
+                <div class="modal fade" id="modalNewHoatDong" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalNewHoatDongLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalNewHoatDongLabel">Thêm mới Hoạt động</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${data.html}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" onclick="$('#modalNewHoatDong').modal('hide');saveHoatDong('${data.id}')">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `
+                $('body').append(modal);
+                $('#modalNewHoatDong').modal('show');
+                $('#modalNewHoatDong').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                    $('#modalNewHoatDong').remove();
+                })
+            });
+        })
+    {% endif %}
+    });
+{% if edit %}
+    function deleteHoatDong(id) {
+        if (confirm("Bạn có chắc chắn muốn xoá Tổ chức / Hoạt động này?")) {
+            $.post('/api/deleteLH', {
+                id: id
+            }, function (data) {
+                if (data) {
+                    //alert("Xoá Tổ chức / Hoạt động thành công!");
+                    $('#btnSearch').click();
+                } else {
+                    alert("Xoá Tổ chức / Hoạt động thất bại!");
+                }
+            });
+        }
+    }
+    function editHoatDong(id) {
+        $.get('/api/getLH', {
+            id: id
+        }, function (data) {
+            var modal = `
+            <div class="modal fade" id="modalEditHoatDong" aria-labelledby="modalEditHoatDongLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditHoatDongLabel">Chỉnh sửa thông tin Tổ chức / Hoạt động</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ${data}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="$('#modalEditHoatDong').modal('hide');saveHoatDong('${id}')">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+            $('body').append(modal);
+            $('#modalEditHoatDong').modal('show');
+            $('#modalEditHoatDong').on('hidden.bs.modal', function (event) {// Code xử lý sự kiện khi modal-dialog đã ẩn hoàn toàn
+                $('#modalEditHoatDong').remove();
+            })
+        });
+    }
+    function saveHoatDong(id) {
+        var ten = $('#editInputTen').val();
+        var loai = $('#editSelecType').val();
+        $.post('/api/saveLH', {
+            id: id,
+            ten: ten,
+            loai: loai
+        }, function (data) {
+            if (data) {
+                //alert("Sửa Tổ chức / Hoạt động thành công!");
+                $('#btnSearch').click();
+            } else {
+                alert("Sửa Tổ chức / Hoạt động thất bại!");
+            }
+        });
+    }
+{% endif %}
+</script>
+{% endblock %}
