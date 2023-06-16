@@ -102,7 +102,7 @@ with onto:
     # -------- Các thuộc tính của Thiết bị -------- #
     class ten(ThietBi >> str, FunctionalProperty): pass
     class soLuong(ThietBi >> int, FunctionalProperty): pass
-    class phong(ThietBi >> Phong, FunctionalProperty): inverse_property = dsThietBi
+    class viTri(ThietBi >> Phong, FunctionalProperty): inverse_property = dsThietBi
     # -------- Các thuộc tính của Sử dụng cho Ruler - Không nhập dữ liệu mà dựa vào tập luật để sinh ra -------- #
     class anhChiEm(HocSinh >> HocSinh): pass
     class anh(HocSinh >> Anh): is_a = [anhChiEm] 
@@ -122,8 +122,8 @@ with onto:
     # rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nam") -> anh(?hs1, ?hs2) ^ em(?hs2,?hs1) ''')
     # rule = Imp()
     # rule.set_as_rule(''' HocSinh(?hs1) ^ HocSinh(?hs2) ^ me(?hs1, ?ph1) ^ me(?hs2, ?ph2) ^ differentFrom(?hs1, ?hs2) ^ sameAs(?ph1, ?ph2) ^ ngaySinh(?hs1, ?ns1) ^ ngaySinh(?hs2, ?ns2) ^ greaterThanOrEqual(?ns1, ?ns2) ^ gioiTinh(?hs1, "Nữ") -> chi(?hs1, ?hs2) ^ em(?hs2,?hs1) ''')
-    rule = Imp()
-    rule.set_as_rule(''' DiemSo(?ds) ^ tx1(?ds, ?d1) ^ tx2(?ds, ?d2) ^ tx3(?ds, ?d3) ^ gk(?ds, ?d4) ^ ck(?ds, ?d5) ^ add(?t, ?d1, ?d2, ?d3, ?d4, ?d4, ?d5, ?d5, ?d5) ^ multiply(?p, ?t, 100) ^ divide(?c, ?p, 8) ^ floor(?r, ?c) ^ divide(?rs, ?r, 100) -> diemTB(?ds, ?rs) ''')
+    # rule = Imp()
+    # rule.set_as_rule(''' DiemSo(?ds) ^ tx1(?ds, ?d1) ^ tx2(?ds, ?d2) ^ tx3(?ds, ?d3) ^ gk(?ds, ?d4) ^ ck(?ds, ?d5) ^ add(?t, ?d1, ?d2, ?d3, ?d4, ?d4, ?d5, ?d5, ?d5) ^ multiply(?p, ?t, 100) ^ divide(?c, ?p, 8) ^ floor(?r, ?c) ^ divide(?rs, ?r, 100) -> diemTB(?ds, ?rs) ''')
     rule = Imp()
     rule.set_as_rule(''' HocSinh(?hs) ^ diemTB(?hs, ?dtb) ^ greaterThanOrEqual(?dtb, 8.0) -> hocLuc(?hs, "Giỏi") ''')
     rule = Imp()

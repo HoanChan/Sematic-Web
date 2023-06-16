@@ -119,10 +119,10 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
             tx1, tx2, tx3, gk, ck = randScore(tb), randScore(tb), randScore(tb), randScore(tb), randScore(tb)
             diem = DiemSo(hocSinh = hs, monHoc = mon_hoc, tx1 = tx1, tx2 = tx2, tx3 = tx3, gk = gk, ck = ck)
             diemTB = round((tx1+tx2+tx3+gk*2+ck*3)/8, 2)
-            # diem.diemTB = diemTB
+            diem.diemTB = diemTB
             dsTB.append(diemTB)
         TongdiemTB = round(sum(dsTB) / len(dsTB),2)
-        # hs.diemTB = TongdiemTB
+        hs.diemTB = TongdiemTB
         # Tính hạnh kiểm
         if TongdiemTB >= 6.5: hs.hanhKiem = random.choice(['Tốt','Khá'])
         elif TongdiemTB >= 5: hs.hanhKiem = random.choice(['Khá','Trung bình'])
@@ -215,25 +215,25 @@ def create_Data(soLopMoiKhoi = 3, soHSMoiLop = 5, soHSCoAnhEm = 20, soGVMoiMon =
     dsThietBi = []
     for phong in dsPhong:
         if phong.loaiPhong == 'Phòng học':
-            ban = ThietBi(ten = 'Bàn học', phong = phong, soLuong = 12)
-            ghe = ThietBi(ten='Ghế học sinh', phong = phong, soLuong = 12)
-            bangPhan = ThietBi(ten='Bảng phấn', phong = phong, soLuong = 1)
-            banGiaoVien = ThietBi(ten='Bàn giáo viên', phong = phong, soLuong = 1)
-            gheGiaoVien = ThietBi(ten='Ghế', phong = phong, soLuong = 1)
-            tivi = ThietBi(ten='Tivi', phong = phong, soLuong = 1)
-            quat = ThietBi(ten='Quạt', phong = phong, soLuong = 4)
+            ban = ThietBi(ten = 'Bàn học', viTri = phong, soLuong = 12)
+            ghe = ThietBi(ten='Ghế học sinh', viTri = phong, soLuong = 12)
+            bangPhan = ThietBi(ten='Bảng phấn', viTri = phong, soLuong = 1)
+            banGiaoVien = ThietBi(ten='Bàn giáo viên', viTri = phong, soLuong = 1)
+            gheGiaoVien = ThietBi(ten='Ghế', viTri = phong, soLuong = 1)
+            tivi = ThietBi(ten='Tivi', viTri = phong, soLuong = 1)
+            quat = ThietBi(ten='Quạt', viTri = phong, soLuong = 4)
             dsThietBi.extend([ban, ghe, bangPhan, banGiaoVien, gheGiaoVien, tivi, quat])
         elif phong.loaiPhong == 'Phòng bộ môn':
-            ban = ThietBi(ten = 'Bàn lớn', phong = phong, soLuong = 2)
-            ghe = ThietBi(ten='Ghế', phong = phong, soLuong = 8)
-            bangTrang = ThietBi(ten='Bảng trắng', phong = phong, soLuong = 1)
-            quat = ThietBi(ten='Quạt', phong = phong, soLuong = 1)
+            ban = ThietBi(ten = 'Bàn lớn', viTri = phong, soLuong = 2)
+            ghe = ThietBi(ten='Ghế', viTri = phong, soLuong = 8)
+            bangTrang = ThietBi(ten='Bảng trắng', viTri = phong, soLuong = 1)
+            quat = ThietBi(ten='Quạt', viTri = phong, soLuong = 1)
             dsThietBi.extend([ban, ghe, bangTrang, quat])
         elif phong.loaiPhong == 'Phòng làm việc':
-            ban = ThietBi(ten = 'Bàn làm việc', phong = phong, soLuong = 1)
-            ghe = ThietBi(ten='Ghế', phong = phong, soLuong = 1)
-            mayTinh = ThietBi(ten='Máy tính', phong = phong, soLuong = 1)
-            mayIn = ThietBi(ten='Máy in', phong = phong, soLuong = 1)
+            ban = ThietBi(ten = 'Bàn làm việc', viTri = phong, soLuong = 1)
+            ghe = ThietBi(ten='Ghế', viTri = phong, soLuong = 1)
+            mayTinh = ThietBi(ten='Máy tính', viTri = phong, soLuong = 1)
+            mayIn = ThietBi(ten='Máy in', viTri = phong, soLuong = 1)
             dsThietBi.extend([ban, ghe, mayTinh, mayIn])
     # Tạo thêm một số phòng bộ môn và các thiết bị trong phòng: Phòng máy tính, thực hành, thí nghiệm
     # Tạo thêm một số phòng cho các tổ chức lớn: Đảng, Đoàn, Công đoàn, Tư vấn tâm lý, ...

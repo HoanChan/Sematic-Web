@@ -32,8 +32,8 @@
                     <label for="selectPhong">Phòng:</label>
                     <select class="form-select" id="selectPhong">
                         <option value="">Tất cả</option>
-                        {% for phong in dsPhong %}
-                        <option value="{{ phong.name }}">{{ phong.ten }}</option>
+                        {% for viTri in dsPhong %}
+                        <option value="{{ viTri.name }}">{{ viTri.ten }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -55,7 +55,7 @@
             <thead>
                 <tr>
                     <th>Tên</th>
-                    <th>Phòng</th>
+                    <th>Vị trí</th>
                     <th>Số lượng</th>
                     {% if edit %}
                     <th>Thao tác</th>
@@ -75,18 +75,18 @@
     $(document).ready(function () {
         $('#btnSearch').click(function () {
             var ten = $('#inputSearch').val();
-            var phong = $('#selectPhong').val();
+            var viTri = $('#selectPhong').val();
 
             $.get('/api/dsTB', {
                 ten: ten,
-                phong: phong
+                viTri: viTri
             }, function (data) {
                 $('#tableData').empty();
 
                 $.each(data, function (index, tb) {
                     var row = '<tr>';
                     row += '<td>' + tb.ten + '</td>';
-                    row += '<td>' + tb.phong + '</td>';
+                    row += '<td>' + tb.viTri + '</td>';
                     row += '<td>' + tb.soLuong + '</td>';
                     {% if edit %}
                     row += '<td>';
