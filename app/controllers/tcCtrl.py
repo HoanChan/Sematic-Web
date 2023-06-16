@@ -54,7 +54,7 @@ def get_dsTC():
     dsLop = onto.LopHoc.instances()
     for tc in [x for x in onto.ToChuc.instances() if x not in dsLop]:
         ten = tc.ten
-        phong = tc.phong.ten if tc.phong else ""
+        phong = ''.join([x.ten for x in tc.phong]) if tc.phong else ""
         slThanhVien = len(tc.thanhVien)
         tc = {'ten': ten, 'phong': phong, 'slThanhVien': slThanhVien}
         dsToChuc.append(tc)

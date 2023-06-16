@@ -34,7 +34,7 @@ def get_dsLH():
     for lh in onto.LopHoc.instances():
         ten = lh.ten
         gvcn = lh.giaoVienChuNhiem.hoTen if lh.giaoVienChuNhiem else ""
-        phong = lh.phong.ten if lh.phong else ""
+        phong = ''.join([x.ten for x in lh.phong]) if lh.phong else ""
         slHS = len(lh.dsHocSinh)
         lh = {'ten': ten, 'gvcn': gvcn, 'phong': phong, 'slHS': slHS}
         dsLop.append(lh)
